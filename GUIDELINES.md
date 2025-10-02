@@ -34,28 +34,31 @@
 Quick overview of the folder organization:  
 
 ```
-CareU/
-├── firstapp/               # Django app (models, views, forms, urls…)
-│   ├── ...                 
+client/                     # Frontend (React/Vue/other JS framework)
+│   ├── node_modules/       # Frontend dependencies
+│   ├── public/             # Static public files (index.html, favicon, etc.)
+│   ├── src/                # Frontend source code
+│   ├── package.json        # Frontend dependencies and scripts
+│   ├── package-lock.json   # Locked dependency versions
+│   └── .gitignore          # Git ignore rules for frontend
 │
-├── static/                 # Global static files (CSS, JS, images)
+server/                     # Backend (Django project)
+│   ├── firstapp/           # Django app (models, views, forms, urls…)
+│   ├── api/                # Django api model (main entry of api. e.g. http://127.0.0.1:8000/api/#resources#)
+│   ├── templates/          # Global templates (HTML pages)
+│   ├── website/            # Core project configuration
+│   │   ├── settings/       # Environment configs (base, dev, prod)
+│   │   ├── urls.py         # Main URL routes
+│   │   ├── asgi.py         # ASGI entry point
+│   │   └── wsgi.py         # WSGI entry point
+│   ├── db.sqlite3          # Local development database
+│   ├── manage.py           # Django management script
+│   └── .gitignore          # Git ignore rules for backend
 │
-├── templates/              # Global templates
-│   ├── includes/           # Template partials (navbar, footer, etc.)
-│   ├── base.html           # Base template for extending other pages
-│
-├── website/                # Project core
-│   ├── settings/           # Configurations (base, dev, prod)
-│   ├── urls.py             # Main routes
-│   ├── asgi.py, wsgi.py    # Server entry points
-│
-├── .env                    # Local environment variables (never committed)
-├── .env.example            # Example environment file to share safe defaults
-├── .gitignore              # Git ignore rules (ignore .env, venv, etc.)
-├── GUIDELINES.md           # Contribution and coding guidelines
-├── manage.py               # Django management script (runserver, migrate, etc.)
-├── README.md               # Project documentation
-└── requirements.txt        # Python dependencies
+.env.example                # Example environment variables file
+GUIDELINES.md               # Contribution and coding guidelines
+README.md                   # Project documentation
+requirements.txt            # Python dependencies
 ```
 ---
 ## 5. 📊 Project Tracking (Jira)
