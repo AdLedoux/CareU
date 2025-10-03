@@ -8,6 +8,7 @@ __pycache__/
 
 # default setting
 .idea/
+.vscode/
 
 # Distribution / packaging
 .Python

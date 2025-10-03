@@ -1,5 +1,7 @@
 import React from 'react';
+import "./styles.css"
 
+// TODO: implement login functionality, can be simply enter user name, no password needed for now :)
 const Login = () => {
     return (
         <div>
