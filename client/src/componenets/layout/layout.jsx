@@ -12,6 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ArticleIcon from '@mui/icons-material/Article';
 import Sidebar from '../sidebar/sidebar';
+import Avatar from '@mui/material/Avatar';
 
 const drawerWidth = 400;
 
@@ -127,9 +128,21 @@ const Layout = () => {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h5" noWrap component="div" sx={{ fontWeight: '600' }}>
-                        **User name and user image here**
-                    </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexGrow: 1 }}>
+                        <Avatar
+                            alt="user avatar"
+                            src={require('../../assets/images/user-avator.png')}
+                            sx={{ width: 60, height: 60, objectFit: 'cover' }}
+                        />
+                        <Typography variant="h5" noWrap component="div" sx={{ fontWeight: '600' }}>
+                            **User name**
+                            <Typography variant="body1" sx={{ fontWeight: '200' }}>
+                                Last synced: 10:09 AM Today
+                            </Typography>
+                        </Typography>
+
+                    </Box>
+
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -161,8 +174,19 @@ const Layout = () => {
                 }}
             >
                 <DrawerHeader sx={{ display: { xs: 'none', sm: 'block' } }} />
-                <Box sx={{ display: { xs: 'block', sm: 'none' } }}>User banner</Box>
-
+                <Box sx={{ display: { xs: 'flex', sm: 'none' }, height: 200, alignItems: 'center', gap: 2, flexGrow: 1 }}>
+                    <Avatar
+                        alt="user avatar"
+                        src={require('../../assets/images/user-avator.png')}
+                        sx={{ width: 100, height: 100, objectFit: 'cover' }}
+                    />
+                    <Typography variant="h5" noWrap component="div" sx={{ fontWeight: '600' }}>
+                        **User name**
+                        <Typography variant="body1" sx={{ fontWeight: '200' }}>
+                            Last synced: 10:09 AM Today
+                        </Typography>
+                    </Typography>
+                </Box>
                 {/* main content will be render here*/}
                 <Outlet />
 

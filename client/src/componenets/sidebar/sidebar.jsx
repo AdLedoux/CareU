@@ -1,4 +1,5 @@
 import React from 'react';
+import "./styles.css"
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -33,11 +34,13 @@ const Sidebar = (props) => {
         <FitnessCenterIcon />
     ];
 
+    const item_list = ['Activity', 'Body Measurements', 'Cycle Tracking', 'Hearing', 'Heart', 'Medications', 'Nutrition', 'Sleep', 'Symptoms', 'Fitness']
+
     return (
         <>
             <Divider />
             <List>
-                {['Activity', 'Body Measurements', 'Cycle Tracking', 'Hearing', 'Heart', 'Medications', 'Nutrition', 'Sleep', 'Symptoms', 'Fitness'].map((text, index) => (
+                {item_list.map((text, index) => (
                     <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                         <ListItemButton
                             sx={[
