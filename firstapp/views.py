@@ -55,3 +55,9 @@ def login_view(request):
 def success_view(request):
     return render(request, "success.html")
 
+
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("Welcome to CareU! <a href='/login/'>Login here</a>")
+
