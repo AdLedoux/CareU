@@ -206,3 +206,17 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 .idea/workspace.xml
+
+# Ignore PyCharm project settings
+.idea/
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore virtual environments
+venv/
+.env/
+
+# Ignore SQLite database (optional)
+db.sqlite3
