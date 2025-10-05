@@ -1,14 +1,7 @@
-<<<<<<< HEAD
 /* body {
     background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
     min-height: 100vh;
 } */
-=======
-body {
-    background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
-    min-height: 100vh;
-}
->>>>>>> 4b77b49a (Login page created)
 
 .login-container {
     max-width: 350px;
