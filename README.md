@@ -84,8 +84,10 @@ Install all required Python dependencies:
 💡 Make sure the file is named requirements.txt (plural).
 If it’s currently named requirement.txt, rename it to match convention.
 
-Run the Django development server:
+Run the Django development server and database:
 ```powershell
+(env) .\CareU\server> python manage.py makemigrations
+(env) .\CareU\server> python manage.py migrate
 (env) .\CareU\server> python manage.py runserver
 ...
 Django version 5.2.7, using settings 'website.settings'
@@ -125,6 +127,8 @@ To stop the servers, press CTRL + C in each terminal.
 
 You can restart them at any time using the same commands:
 ```powershell
+(env) .\CareU\server> python manage.py makemigrations
+(env) .\CareU\server> python manage.py migrate
 (env) .\CareU\server> python manage.py runserver
 
 .\CareU\client> npm run dev

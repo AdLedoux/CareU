@@ -8,5 +8,5 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 class CreateUserView(generics.CreateAPIView):
     queryset = User.objects.all()       # Verify if the user already exists
-    serializer_class = User   
+    serializer_class = UserSerializer   
     permission_classes = [AllowAny]     # Allow anyone to create an account
