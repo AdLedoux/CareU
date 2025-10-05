@@ -1,75 +1,137 @@
 # CareU
-Fitness and Health tracking app
+
+## Description
+CareU is a web application designed to help users monitor their physical activity, nutrition, and overall health.  
+It includes a Django-based backend (server) and a React-based frontend (client).
+
+## Table of content
+
+---
 
 
-# Developper Workspace Setup
-## Windows First installation
-### Local scripts
-First verify that you have python, git and Node.js installed on your computer. If not you can dowload it from the official website at :
 
-Python : https://www.python.org/downloads/    \
-Git : https://git-scm.com/downloads           \
-Node : https://nodejs.org/en/download/current
+## 🚀 Production Installation
+
+## 🧾 License
+
+
+
+---
+
+## 🧑‍💻 Developer Workspace Setup (🪟 Windows — First Installation)
+### 1. Prerequisites
+Make sure the following tools are installed on your computer:
+
+- **Python** → https://www.python.org/downloads/  
+- **Git** → https://git-scm.com/downloads  
+- **Node.js (includes npm)** → https://nodejs.org/en/download 
 
 
 you can verify your installation by typing the following command in a powershell :
 
-```
+```powershell
 .> python --version
-Python 3.0.0 
-# (or above)
+Python 3.x.x
+# (3.10 or above recommended)
 
 .>git --version
-git version 2.51.0.windows.1 
+git version 2.x.x 
 # (or above)
 
 .> node --version
-v24.0.0 
+v20.0.0 
 # (or above)
-```
-To avoid futhur issue please use the basic configuration for all and add them to path 
-(**which is not preselect for python dowload**) unless you know what you are doing.
 
-### Workspace configuration
-If not already done clone the CareU repository by using the following command.
+.> npm --version
+10.x.x 
+#(or above)
 ```
+⚠️ During installation, make sure to check “**Add to PATH**” for all tools
+(especially for Python, as it’s not selected by default).
+
+
+### 2. Clone the Repository
+Open PowerShell and run:
+
+```powershell
 .> git clone https://github.com/AdLedoux/CareU.git
+.> cd CareU
 ```
-Once in the repository go to server in a powershell and type the following command to setup python virtual environment :
-```
+
+### 3. Backend Setup (Django)
+Navigate to the server directory and create a Python virtual environment:
+
+```powershell
+.\CareU> cd server
 .\CareU\server> python -m venv env
 ```
 
-Then activate it by using the following command :
-```
+Activate the virtual environment:
+
+```powershell
 .\CareU\server> .\env\Scripts\activate
 ```
-Once done a little icon should appear in your powershell if not restart your powershell and retry. Then install all the requirement module by using :
-```
-(env) .\CareU\server> pip install -r requirement.txt
+
+If activation works, you should see ``(env)`` before your PowerShell prompt.
+If not, restart PowerShell and retry.
+
+Install all required Python dependencies:
+
+```powershell
+(env) .\CareU\server> pip install -r requirements.txt
 ``` 
-You can now start the Django serveur with :
-```
-(env) .\CareU\server> py manage.py runserver
+
+💡 Make sure the file is named requirements.txt (plural).
+If it’s currently named requirement.txt, rename it to match convention.
+
+Run the Django development server:
+```powershell
+(env) .\CareU\server> python manage.py runserver
 ...
 Django version 5.2.7, using settings 'website.settings'
 Starting development server at http://127.0.0.1:8000/
 Quit the server with CTRL-BREAK.
 ```
-Get the ip and port server number here *http://127.0.0.1:8000/* and verify it is the same in the *env/* folder. If not change it.
+Your backend should now be running at http://127.0.0.1:8000/.
 
-Start now a new powershell and go to the client directory and tape the following command :
+Check ``5. Common Tips`` if it differ.
+
+### 4. Frontend Setup (React / Vite)
+Open a **new PowerShell window** (keep the Django server running) and navigate to the client folder:
+
+```powershell
+.>cd CareU\client
 ```
+
+Install all Node dependencies:
+
+```powershell
 .\CareU\client> npm install
 ```
-Then launch the frontend server  with 
+
+Start the frontend development server:
+
+```powershell
+.\CareU\client> npm run dev
+VITE v5.x.x  ready in 1s
+ -> Local:   http://127.0.0.1:5173/
 ```
+Now open the URL in your browser (e.g., http://127.0.0.1:5173/) to access the app.
+
+### 5. Common Tips
+If the frontend and backend ports differ, update your environment variables or .env files accordingly.
+
+To stop the servers, press CTRL + C in each terminal.
+
+You can restart them at any time using the same commands:
+```powershell
+(env) .\CareU\server> python manage.py runserver
+
 .\CareU\client> npm run dev
 ```
-The application should be accessible in the given ip address. Enjoy !
 
-## Other launch
+Some additional guidelines have been wrote in ``GUIDELINES.md``.
 
+---
 
-# Production Installation
-The production installation will be made later using docker....
+## 🧑‍💼 Contributors
