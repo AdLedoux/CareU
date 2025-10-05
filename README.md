@@ -114,9 +114,7 @@ Install all Node dependencies:
 Start the frontend development server:
 
 ```powershell
-.\CareU\client> npm run dev
-VITE v5.x.x  ready in 1s
- -> Local:   http://127.0.0.1:5173/
+.\CareU\client> npm start
 ```
 Now open the URL in your browser (e.g., http://127.0.0.1:5173/) to access the app.
 
@@ -131,7 +129,8 @@ You can restart them at any time using the same commands:
 (env) .\CareU\server> python manage.py migrate
 (env) .\CareU\server> python manage.py runserver
 
-.\CareU\client> npm run dev
+.\CareU\client> npm install
+.\CareU\client> npm start
 ```
 
 Some additional guidelines have been wrote in ``GUIDELINES.md``.
