@@ -1,0 +1,10 @@
+asgiref                        #ASGI specification implementation, used by Django   ??????
+Django                         #Web framework
+django-cors-headers            #Fix cross origin request issues                     ??????
+djangorestframework            #Django REST framework for building APIs
+djangorestframework-simplejwt  #Simple JWT authentication for Django REST framework
+PyJWT                          #JSON Web Token implementation in Python
+pytz                           #World timezone definitions for Python
+sqlparse                       #Non-validating SQL parser for Python
+psycopg2-binary                #PostgreSQL database adapter for Python
+python-dotenv                  #Read key-value pairs from a .env file and set them as environment variables
