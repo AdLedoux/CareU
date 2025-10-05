@@ -15,16 +15,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,include
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-]
-
-from django.contrib import admin
-from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("firstapp.urls")),   # 👈 this connects firstapp/urls.py
 ]
+
+
+from django.contrib import admin
+from django.urls import path, include
+from django.shortcuts import redirect
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("login/", include("firstapp.urls")),   # if login view is in firstapp
+    path("success/", include("firstapp.urls")), # success also in firstapp
+    path("", lambda request: redirect("login")),  # 👈 redirect root to login
+]
+
+
