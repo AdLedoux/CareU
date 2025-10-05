@@ -2,7 +2,7 @@
 
 ## Description
 CareU is a web application designed to help users monitor their physical activity, nutrition, and overall health.  
-It includes a Django-based backend (server) and a React-based frontend (client).
+It includes a Django-based backend (server) and a React-based frontend (client) communationg with a JWT token to ensure security.
 
 ## Table of content
 
@@ -111,6 +111,12 @@ Install all Node dependencies:
 .\CareU\client> npm install
 ```
 
+At the same hight as the file ``.env.example`` create (if not already done) a file ``.env`` to store the server ip and port as follow :
+
+```
+REACT_APP_API_URL="http://127.0.0.1:8000"
+```
+
 Start the frontend development server:
 
 ```powershell
@@ -138,3 +144,4 @@ Some additional guidelines have been wrote in ``GUIDELINES.md``.
 ---
 
 ## 🧑‍💼 Contributors
+- AdLedoux —  Full Stack Developer
