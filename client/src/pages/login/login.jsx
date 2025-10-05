@@ -1,15 +1,34 @@
 import React, { useState } from 'react';
+
+import api from "../../api";
+import { useNavigate } from "react-router-dom";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
+
 import "./styles.css";
 import FavoriteIcon from '@mui/icons-material/Favorite'; // Example icon for branding
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
+        setLoading(true);
         e.preventDefault();
-        alert(`Username: ${username}\nPassword: ${password}`);
-        // TODO: Add authentication logic here
+
+        try {
+            const res = await api.post("/api/token/", { username, password })
+        
+            localStorage.setItem(ACCESS_TOKEN, res.data.access);
+            localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+            navigate("/")
+            
+        } catch (error) {
+            alert(error)
+        } finally {
+            setLoading(false)
+        }
     };
 
     return (
@@ -45,7 +64,7 @@ const Login = () => {
                 <button type="submit">Login</button>
             </form>
             <div style={{ textAlign: "center", marginTop: 18, color: "#888" }}>
-                Don&apos;t have an account? <a href="/create-account" style={{ color: "#1976d2" }}>Sign up</a>
+                Don&apos;t have an account? <a href="/register" style={{ color: "#1976d2" }}>Sign up</a>
             </div>
         </div>
     );

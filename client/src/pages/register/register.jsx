@@ -1,15 +1,53 @@
 import React, { useState } from 'react';
+
+import api from "../../api";
+import { useNavigate } from "react-router-dom";
+
 import "./styles.css";
 import FavoriteIcon from '@mui/icons-material/Favorite'; // Example icon for branding
 
 const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert(`Username: ${username}\nPassword: ${password}`);
-        // TODO: Add authentication logic here
+        setLoading(true);
+
+        try {
+            const res = await api.post("/api/user/register/", { username, password })
+            // On success navigate to login
+            navigate("/login")
+
+        } catch (error) {
+            // If the backend returns validation errors, axios exposes them on error.response.data
+            if (error.response && error.response.data) {
+                // Try to show a helpful message. It may be a dict of field errors or a string.
+                const data = error.response.data;
+                if (typeof data === 'string') {
+                    alert(data);
+                } else if (typeof data === 'object') {
+                    // Join field errors into a single message
+                    const messages = [];
+                    for (const key in data) {
+                        if (Array.isArray(data[key])) {
+                            messages.push(`${key}: ${data[key].join(', ')}`);
+                        } else {
+                            messages.push(`${key}: ${data[key]}`);
+                        }
+                    }
+                    alert(messages.join('\n'))
+                } else {
+                    alert('Registration failed')
+                }
+            } else {
+                alert(error.message || 'Registration failed')
+            }
+        } finally {
+            setLoading(false)
+        }
     };
 
     return (
@@ -42,10 +80,10 @@ const Register = () => {
                         placeholder="Enter your password"
                     />
                 </div>
-                <button type="submit">Submit</button>
+                <button type="submit" disabled={loading}>{loading ? 'Submitting...' : 'Submit'}</button>
             </form>
             <div style={{ textAlign: "center", marginTop: 18, color: "#888" }}>
-                You already have an account? <a href="/create-account" style={{ color: "#1976d2" }}>Sign in</a>
+                You already have an account? <a href="/login" style={{ color: "#1976d2" }}>Sign in</a>
             </div>
         </div>
     );
