@@ -24,15 +24,6 @@ urlpatterns = [
 ]
 
 
-from django.contrib import admin
-from django.urls import path, include
-from django.shortcuts import redirect
 
-urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("login/", include("firstapp.urls")),   # if login view is in firstapp
-    path("success/", include("firstapp.urls")), # success also in firstapp
-    path("", lambda request: redirect("login")),  # 👈 redirect root to login
-]
 
 
