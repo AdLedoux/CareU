@@ -27,6 +27,23 @@ function RegisterAndLogout() {
 function App() {
   return (
     <Routes>
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Home />} />
+      </Route>
+
+      <Route path="/login" element={<Login />} />
+      <Route path="/logout" element={<Logout />} />
+      <Route path="/register" element={<RegisterAndLogout />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+    <Routes>
       {/* Protected routes — everything inside Layout */}
       <Route
         path="/"
