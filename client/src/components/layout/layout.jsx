@@ -14,6 +14,7 @@ import ArticleIcon from '@mui/icons-material/Article';
 import Sidebar from '../sidebar/sidebar';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+import { useSelector } from 'react-redux';
 
 const drawerWidth = 400;
 
@@ -125,6 +126,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const Layout = () => {
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
+    const user = useSelector((state) => state.user);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -163,7 +165,7 @@ const Layout = () => {
                             sx={{ width: 60, height: 60, objectFit: 'cover' }}
                         />
                         <Typography variant="h5" noWrap component="div" sx={{ fontWeight: '600' }}>
-                            **User name**
+                            {user.username}
                             <Typography variant="body1" sx={{ fontWeight: '200' }}>
                                 Last synced: 10:09 AM Today
                             </Typography>
@@ -210,7 +212,7 @@ const Layout = () => {
                         sx={{ width: 100, height: 100, objectFit: 'cover' }}
                     />
                     <Typography variant="h5" noWrap component="div" sx={{ fontWeight: '600' }}>
-                        **User name**
+                        {user.username}
                         <Typography variant="body1" sx={{ fontWeight: '200' }}>
                             Last synced: 10:09 AM Today
                         </Typography>
