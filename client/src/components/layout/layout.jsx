@@ -13,6 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ArticleIcon from '@mui/icons-material/Article';
 import Sidebar from '../sidebar/sidebar';
 import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
 
 const drawerWidth = 400;
 
@@ -68,6 +69,33 @@ const AppBar = styled(MuiAppBar, {
         },
     ],
 }));
+
+const handleClickLogout = async (e) => {
+    e.preventDefault();
+    console.log("logout clicked");
+
+    const refresh = localStorage.getItem('refresh_token');
+    const access = localStorage.getItem('access_token');
+
+    if (refresh) {
+        try {
+            await fetch('/api/token/logout/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${access}`,
+                },
+                body: JSON.stringify({ refresh }),
+            });
+        } catch (err) {
+            console.error('logout request failed', err);
+        }
+    }
+
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    window.location.href = '/login';
+};
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme }) => ({
@@ -139,6 +167,7 @@ const Layout = () => {
                             <Typography variant="body1" sx={{ fontWeight: '200' }}>
                                 Last synced: 10:09 AM Today
                             </Typography>
+                            <Button variant="text" onClick={handleClickLogout}>Logout</Button>
                         </Typography>
 
                     </Box>
@@ -185,6 +214,7 @@ const Layout = () => {
                         <Typography variant="body1" sx={{ fontWeight: '200' }}>
                             Last synced: 10:09 AM Today
                         </Typography>
+                        <Button variant="text" onClick={handleClickLogout}>Logout</Button>
                     </Typography>
                 </Box>
                 {/* main content will be render here*/}
