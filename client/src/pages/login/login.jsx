@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import api from "../../api";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
+import FormLabel from '@mui/material/FormLabel';
+
 
 import "./styles.css";
 import FavoriteIcon from '@mui/icons-material/Favorite'; // Example icon for branding
@@ -42,7 +44,7 @@ const Login = () => {
             </div>
             <form onSubmit={handleSubmit} className="login-form">
                 <div>
-                    <label>Username</label>
+                    <FormLabel>Username</FormLabel>
                     <input
                         type="text"
                         value={username}
@@ -52,7 +54,7 @@ const Login = () => {
                     />
                 </div>
                 <div>
-                    <label>Password</label>
+                    <FormLabel>Password</FormLabel>
                     <input
                         type="password"
                         value={password}
@@ -61,10 +63,11 @@ const Login = () => {
                         placeholder="Enter your password"
                     />
                 </div>
-                <button type="submit">Login</button>
+                <button type="submit" disabled={loading}>{loading ? 'Logining...' : 'Login'}</button>
+
             </form>
             <div style={{ textAlign: "center", marginTop: 18, color: "#888" }}>
-                Don&apos;t have an account? <a href="/register" style={{ color: "#1976d2" }}>Sign up</a>
+                Don&apos;t have an account? <a href="/register" style={{ color: "#1976d2" }}>Join now</a>
             </div>
         </div>
     );
