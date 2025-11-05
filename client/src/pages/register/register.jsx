@@ -8,8 +8,16 @@ import {
     FormControlLabel,
     FormLabel,
     Box,
-    Slider
+    Slider,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    useMediaQuery
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import "./styles.css";
@@ -22,28 +30,38 @@ const Register = () => {
     const [height, setHeight] = useState(170);
     const [weight, setWeight] = useState(60);
     const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false); // for dialog
     const navigate = useNavigate();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
         if (age < 0 || age > 120) {
             alert("Please enter a valid age between 0 and 120.");
-            setLoading(false);
             return;
         }
+        setOpen(true);
+    };
 
+    const handleDisagree = () => {
+        setOpen(false);
+    };
+
+    const handleAgree = async () => {
+        setLoading(true);
         try {
             await api.post("/api/user/register/", {
                 username,
                 password,
-                // age,
-                // gender,
-                // height,
-                // weight,
+                age,
+                gender,
+                height,
+                weight,
             });
 
+            setOpen(false);
             navigate("/login");
         } catch (error) {
             if (error.response && error.response.data) {
@@ -170,7 +188,7 @@ const Register = () => {
                 </div>
 
                 <button type="submit" disabled={loading}>
-                    {loading ? 'Submitting...' : 'Submit'}
+                    {loading ? 'Submitting...' : 'Create Account'}
                 </button>
             </form>
 
@@ -178,6 +196,37 @@ const Register = () => {
                 Already have an account?{' '}
                 <a href="/login" style={{ color: "#1976d2" }}>Sign in</a>
             </div>
+
+            {/* Consent Dialog */}
+            <Dialog
+                fullScreen={fullScreen}
+                open={open}
+                onClose={handleDisagree}
+                aria-labelledby="responsive-dialog-title"
+            >
+                <DialogTitle id="responsive-dialog-title">
+                    {"User Consent for Personal Health Data"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        CareU collects and processes your personal information (such as age, height, weight, and gender)
+                        solely for the purpose of providing personalized health insights and recommendations.{" "}
+                        <br /><br />
+                        Your data will be securely stored and never shared with third parties without your consent.
+                        You may withdraw your consent and delete your data at any time in your account settings.{" "}
+                        <br /><br />
+                        Do you agree to share this information for improving your health experience within CareU?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDisagree} color="error">
+                        Disagree
+                    </Button>
+                    <Button onClick={handleAgree} autoFocus color="primary" variant="contained">
+                        Agree & Continue
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };
