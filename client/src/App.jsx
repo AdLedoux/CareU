@@ -1,4 +1,3 @@
-﻿import Nutrition from './pages/nutrition/nutrition'
 import { Routes, Route, Navigate } from "react-router-dom"
 import Login from "./pages/login/login"
 import Register from "./pages/register/register"
@@ -14,6 +13,7 @@ import Fitness from "./pages/fitness/Fitness"
 import Heart from "./pages/heart/Heart"
 import Sleep from "./pages/sleep/Sleep"
 import Mood from "./pages/mood/Mood"
+import Nutrition from "./pages/nutrition/nutrition"
 
 function Logout() {
   localStorage.clear()
@@ -28,6 +28,7 @@ function RegisterAndLogout() {
 function App() {
   return (
     <Routes>
+      {/* Protected routes - everything inside Layout */}
       <Route
         path="/"
         element={
@@ -36,8 +37,14 @@ function App() {
           </ProtectedRoute>
         }
       >
-      <Route index element={<Home />} />
-      <Route path="nutrition" element={<Nutrition />} />
+        <Route index element={<Home />} />
+        <Route path="activity" element={<Activity />} />
+        <Route path="body" element={<Body />} />
+        <Route path="body-measurements" element={<Body />} />
+        <Route path="cycle" element={<Cycle />} />
+        <Route path="cycle-tracking" element={<Cycle />} />
+        <Route path="heart" element={<Heart />} />
+        <Route path="nutrition" element={<Nutrition />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/logout" element={<Logout />} />
@@ -73,4 +80,3 @@ function App() {
 }
 
 export default App
-
