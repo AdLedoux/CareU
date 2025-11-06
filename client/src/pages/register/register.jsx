@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import api from "../../api";
 import { useNavigate } from "react-router-dom";
-
-import { useDispatch } from 'react-redux';
-import { setUserInfo } from '../../redux/userSlice';
-
 import {
     Radio,
     RadioGroup,
@@ -39,8 +35,6 @@ const Register = () => {
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-    const dispatch = useDispatch();
-
     const handleSubmit = (e) => {
         e.preventDefault();
         if (age < 0 || age > 120) {
@@ -60,15 +54,16 @@ const Register = () => {
             await api.post("/api/user/register/", {
                 username,
                 password,
+            });
+
+            await api.post("/api/userInfo/basic/", {
+                username,
                 age,
                 gender,
                 height,
                 weight,
             });
 
-            dispatch(setUserInfo({ username, age, gender, height, weight }));
-
-            setOpen(false);
             navigate("/login");
         } catch (error) {
             if (error.response && error.response.data) {

@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "api",                               # api application add
     "rest_framework",                    # Django REST framework
     "corsheaders",                       # CORS headers (related to the origin issue ??????)
+    "userInfo",                           # userInfo application add
 ]
 
 MIDDLEWARE = [

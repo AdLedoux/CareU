@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from api.views import CreateUserView, LogoutView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
@@ -13,7 +13,8 @@ urlpatterns = [
     path("token/refresh/", TokenRefreshView.as_view(), name="refresh"),
     path("token/logout/", LogoutView.as_view(), name="logout"),
     
-    
+    # user info endpoints
+    path("userInfo/", include("userInfo.urls")),
 ]
 
 
