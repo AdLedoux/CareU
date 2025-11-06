@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Putting here the specific apps
+    "health",                            # health application add
     "api",                               # api application add
     "rest_framework",                    # Django REST framework
     "corsheaders",                       # CORS headers (related to the origin issue ??????)
@@ -70,6 +72,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Putting here specific middleware
     "corsheaders.middleware.CorsMiddleware",  # CORS middleware (related to the origin issue ??????)
 ]
 
@@ -99,7 +102,7 @@ WSGI_APPLICATION = 'website.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR /'instance' / 'db.sqlite3',
+        'NAME': BASE_DIR / 'instance' / 'db.sqlite3',
     }
 }
 
