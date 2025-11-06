@@ -34,6 +34,8 @@ const Home = () => {
     ];
 
     const item_list = ['Activity', 'Body Measurements', 'Cycle Tracking', 'Hearing', 'Heart', 'Medications', 'Nutrition', 'Sleep', 'Symptoms', 'Fitness']
+    const linklist = ['/activity', '/body-measurements', 'cycle-tracking', 'hearing', 'heart', 'medications', 'nutrition', 'sleep', 'symptoms', 'fitness']
+
 
 
     return (
@@ -51,8 +53,8 @@ const Home = () => {
                         key={index}
                         sx={{ display: 'flex', justifyContent: 'center' }}
                     >
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardActionArea>
+                        <Card sx={{ maxWidth: 345 }} >
+                            <CardActionArea href={linklist[index]}>
                                 <Box sx={{ display: 'flex', justifyContent: 'center', pt: 2 }}>
                                     {Icons[index]}
                                     <Typography gutterBottom variant="h6">
@@ -61,8 +63,7 @@ const Home = () => {
                                 </Box>
                                 <CardContent>
                                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                        Lizards are a widespread group of squamate reptiles, with over 6,000
-                                        species, ranging across all continents except Antarctica
+                                        Health activity summary
                                     </Typography>
                                 </CardContent>
                             </CardActionArea>

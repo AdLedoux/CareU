@@ -13,6 +13,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ArticleIcon from '@mui/icons-material/Article';
 import Sidebar from '../sidebar/sidebar';
 import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import { useSelector } from 'react-redux';
 
 const drawerWidth = 400;
 
@@ -69,6 +71,33 @@ const AppBar = styled(MuiAppBar, {
     ],
 }));
 
+const handleClickLogout = async (e) => {
+    e.preventDefault();
+    console.log("logout clicked");
+
+    const refresh = localStorage.getItem('refresh_token');
+    const access = localStorage.getItem('access_token');
+
+    if (refresh) {
+        try {
+            await fetch('/api/token/logout/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${access}`,
+                },
+                body: JSON.stringify({ refresh }),
+            });
+        } catch (err) {
+            console.error('logout request failed', err);
+        }
+    }
+
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    window.location.href = '/login';
+};
+
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme }) => ({
         width: drawerWidth,
@@ -96,7 +125,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const Layout = () => {
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
+    const user = useSelector((state) => state.user);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -135,10 +165,11 @@ const Layout = () => {
                             sx={{ width: 60, height: 60, objectFit: 'cover' }}
                         />
                         <Typography variant="h5" noWrap component="div" sx={{ fontWeight: '600' }}>
-                            **User name**
+                            {user.username}
                             <Typography variant="body1" sx={{ fontWeight: '200' }}>
                                 Last synced: 10:09 AM Today
                             </Typography>
+                            <Button variant="text" onClick={handleClickLogout}>Logout</Button>
                         </Typography>
 
                     </Box>
@@ -181,10 +212,11 @@ const Layout = () => {
                         sx={{ width: 100, height: 100, objectFit: 'cover' }}
                     />
                     <Typography variant="h5" noWrap component="div" sx={{ fontWeight: '600' }}>
-                        **User name**
+                        {user.username}
                         <Typography variant="body1" sx={{ fontWeight: '200' }}>
                             Last synced: 10:09 AM Today
                         </Typography>
+                        <Button variant="text" onClick={handleClickLogout}>Logout</Button>
                     </Typography>
                 </Box>
                 {/* main content will be render here*/}

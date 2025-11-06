@@ -1,33 +1,42 @@
 import React, { useState } from 'react';
-
 import api from "../../api";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "../../redux/userSlice";
+import FormLabel from '@mui/material/FormLabel';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import "./styles.css";
-import FavoriteIcon from '@mui/icons-material/Favorite'; // Example icon for branding
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleSubmit = async (e) => {
-        setLoading(true);
         e.preventDefault();
+        setLoading(true);
 
         try {
-            const res = await api.post("/api/token/", { username, password })
-        
+            const res = await api.post("/api/token/", { username, password });
             localStorage.setItem(ACCESS_TOKEN, res.data.access);
             localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
-            navigate("/")
-            
+
+            const userRes = await api.get("/api/userInfo/basic/", {
+                params: { username },
+            });
+
+            dispatch(setUserInfo(userRes.data));
+
+            navigate("/");
         } catch (error) {
-            alert(error)
+            console.error("Login failed:", error);
+            alert("Login failed. Please check your username or password.");
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
     };
 
@@ -40,9 +49,10 @@ const Login = () => {
                     Welcome back! Please login to your account.
                 </div>
             </div>
+
             <form onSubmit={handleSubmit} className="login-form">
                 <div>
-                    <label>Username</label>
+                    <FormLabel>Username</FormLabel>
                     <input
                         type="text"
                         value={username}
@@ -52,7 +62,7 @@ const Login = () => {
                     />
                 </div>
                 <div>
-                    <label>Password</label>
+                    <FormLabel>Password</FormLabel>
                     <input
                         type="password"
                         value={password}
@@ -61,10 +71,14 @@ const Login = () => {
                         placeholder="Enter your password"
                     />
                 </div>
-                <button type="submit">Login</button>
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Logging in...' : 'Login'}
+                </button>
             </form>
+
             <div style={{ textAlign: "center", marginTop: 18, color: "#888" }}>
-                Don&apos;t have an account? <a href="/register" style={{ color: "#1976d2" }}>Sign up</a>
+                Don&apos;t have an account?{" "}
+                <a href="/register" style={{ color: "#1976d2" }}>Join now</a>
             </div>
         </div>
     );
