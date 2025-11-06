@@ -13,6 +13,7 @@ import HearingIcon from '@mui/icons-material/Hearing';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import MedicationIcon from '@mui/icons-material/Medication';
 import AppleIcon from '@mui/icons-material/Apple';
+import HomeIcon from '@mui/icons-material/Home';
 import BedIcon from '@mui/icons-material/Bed';
 import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
@@ -22,6 +23,7 @@ const Sidebar = (props) => {
     const { open } = props;
 
     const Icons = [
+        <HomeIcon />,
         <LocalFireDepartmentIcon />,
         <AccessibilityIcon />,
         <DirectionsBikeIcon />,
@@ -34,14 +36,15 @@ const Sidebar = (props) => {
         <FitnessCenterIcon />
     ];
 
-    const item_list = ['Activity', 'Body Measurements', 'Cycle Tracking', 'Hearing', 'Heart', 'Medications', 'Nutrition', 'Sleep', 'Symptoms', 'Fitness']
+    const item_list = ['Home', 'Activity', 'Body Measurements', 'Cycle Tracking', 'Hearing', 'Heart', 'Medications', 'Nutrition', 'Sleep', 'Symptoms', 'Fitness']
+    const linklist = ['/', '/activity', '/body-measurements', '/cycle-tracking', '/hearing', '/heart', '/medications', '/nutrition', '/sleep', '/symptoms', '/fitness']
 
     return (
         <>
             <Divider />
             <List>
                 {item_list.map((text, index) => (
-                    <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                    <ListItem key={text} disablePadding sx={{ display: 'block' }} >
                         <ListItemButton
                             sx={[
                                 {
@@ -56,6 +59,7 @@ const Sidebar = (props) => {
                                         justifyContent: 'center',
                                     },
                             ]}
+                            href={linklist[index]}
                         >
                             <ListItemIcon
                                 sx={[
