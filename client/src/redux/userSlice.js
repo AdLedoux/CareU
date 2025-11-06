@@ -1,7 +1,6 @@
-// src/redux/userSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {
+const savedUser = JSON.parse(localStorage.getItem('user')) || {
   username: '',
   age: null,
   gender: '',
@@ -9,9 +8,9 @@ const initialState = {
   weight: null,
 };
 
-export const userSlice = createSlice({
+const userSlice = createSlice({
   name: 'user',
-  initialState,
+  initialState: savedUser,
   reducers: {
     setUserInfo: (state, action) => {
       const { username, age, gender, height, weight } = action.payload;
@@ -20,6 +19,8 @@ export const userSlice = createSlice({
       state.gender = gender;
       state.height = height;
       state.weight = weight;
+
+      localStorage.setItem('user', JSON.stringify(state));
     },
     clearUserInfo: (state) => {
       state.username = '';
@@ -27,7 +28,9 @@ export const userSlice = createSlice({
       state.gender = '';
       state.height = null;
       state.weight = null;
-    }
+
+      localStorage.removeItem('user');
+    },
   },
 });
 
