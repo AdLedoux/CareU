@@ -215,4 +215,4 @@ __marimo__/
 *.sqlite
 *.sqlite3
 # Ignore project-local sqlite DB
-server/db.sqlite3
+# server/db.sqlite3
