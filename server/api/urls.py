@@ -1,4 +1,4 @@
-from django.contrib import admin
+﻿from django.contrib import admin
 from django.urls import include, path
 from api.views import CreateUserView, LogoutView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -15,7 +15,9 @@ urlpatterns = [
     
     # user info endpoints
     path("userInfo/", include("userInfo.urls")),
-]
+
+    path('nutrition/', include('nutrition.urls')),]
+
 
 
 

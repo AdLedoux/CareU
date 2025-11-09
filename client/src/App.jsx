@@ -1,3 +1,4 @@
+﻿import Nutrition from './pages/nutrition/nutrition'
 import { Routes, Route, Navigate } from "react-router-dom"
 import Login from "./pages/login/login"
 import Register from "./pages/register/register"
@@ -27,9 +28,9 @@ function App() {
           </ProtectedRoute>
         }
       >
-        <Route index element={<Home />} />
+      <Route index element={<Home />} />
+      <Route path="nutrition" element={<Nutrition />} />
       </Route>
-
       <Route path="/login" element={<Login />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="/register" element={<RegisterAndLogout />} />
@@ -39,3 +40,4 @@ function App() {
 }
 
 export default App
+
