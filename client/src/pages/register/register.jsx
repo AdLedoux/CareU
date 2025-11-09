@@ -26,11 +26,42 @@ const Register = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!username || !password || !age || !gender || !height || !weight) {
-            alert("Please fill in all required fields.");
+        if (!username || !password) {
+            alert("Username and password are required.");
+            setLoading(false);
             return;
+        } else if (age < 0 || age > 120) {
+            alert("Please enter a valid age between 0 and 120.");
+            setLoading(false);
+            return;
+        } else if (height < 0 || height > 300) {
+            alert("Please enter a valid height between 0 and 300 cm.");
+            setLoading(false);
+            return;
+        } else if (weight < 0 || weight > 300) {
+            alert("Please enter a valid weight between 0 and 300 kg.");
+            setLoading(false);
+            return;
+        } else if (!gender) {
+            alert("Please select a gender.");
+            setLoading(false);
+            return;
+        } else if (!age) {
+            alert("Please enter your age.");
+            setLoading(false);
+            return;
+        } else if (!height) {
+            alert("Please enter your height.");
+            setLoading(false);
+            return;
+        } else if (!weight) {
+            alert("Please enter your weight.");
+            setLoading(false);
+            return;
+        } else {
+            setOpen(true);
         }
-        setOpen(true);
+
     };
 
     const handleDisagree = () => setOpen(false);
@@ -38,10 +69,21 @@ const Register = () => {
     const handleAgree = async () => {
         setLoading(true);
         try {
-            await api.post("/api/user/register/", { username, password });
-            await api.post("/api/userInfo/profile/", { username, age, gender, height, weight });
+            await api.post("/api/user/register/", {
+                username,
+                password,
+            });
 
+            await api.post("/api/userInfo/basic/", {
+                username,
+                age,
+                gender,
+                height,
+                weight,
+            });
             navigate("/login");
+
+
         } catch (error) {
             if (error.response && error.response.data) {
                 const data = error.response.data;
@@ -60,6 +102,8 @@ const Register = () => {
             setOpen(false);
         }
     };
+
+
 
     return (
         <div className="login-container">
