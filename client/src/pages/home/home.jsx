@@ -36,8 +36,6 @@ const Home = () => {
     const item_list = ['Activity', 'Body Measurements', 'Cycle Tracking', 'Hearing', 'Heart', 'Medications', 'Nutrition', 'Sleep', 'Symptoms', 'Fitness']
     const linklist = ['/activity', '/body-measurements', 'cycle-tracking', 'hearing', 'heart', 'medications', 'nutrition', 'sleep', 'symptoms', 'fitness']
 
-
-
     return (
         <Box sx={{ width: '100%' }}>
             <Grid
