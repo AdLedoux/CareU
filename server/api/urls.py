@@ -1,4 +1,4 @@
-from django.contrib import admin
+﻿from django.contrib import admin
 from django.urls import include, path
 from api.views import CreateUserView, LogoutView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -22,7 +22,9 @@ urlpatterns = [
     
     #ai agnet
     path("ai/", include("ai_agent.urls")),
-]
+
+    path('nutrition/', include('nutrition.urls')),]
+
 
 
 
