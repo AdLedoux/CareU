@@ -1,12 +1,13 @@
 from rest_framework import serializers
-from .models import FitnessRecord
+from .models import HourlyCalories
 
-class FitnessRecordSerializer(serializers.ModelSerializer):
+class HourlyCaloriesSerializer(serializers.ModelSerializer):
+    # 返回用户名而不是 user id
     username = serializers.CharField(source='user.username', read_only=True)
 
     class Meta:
-        model = FitnessRecord
-        fields = ['id', 'username', 'user', 'ActivityHour', 'StepTotal']
+        model = HourlyCalories
+        fields = ['id', 'username', 'user', 'ActivityHour', 'Calories']
         extra_kwargs = {
             'user': {'write_only': True}
         }
@@ -15,9 +16,9 @@ class FitnessRecordSerializer(serializers.ModelSerializer):
         user = validated_data['user']
         activity_hour = validated_data['ActivityHour']
 
-        record, created = FitnessRecord.objects.update_or_create(
+        record, created = HourlyCalories.objects.update_or_create(
             user=user,
             ActivityHour=activity_hour,
-            defaults={'StepTotal': validated_data['StepTotal']}
+            defaults={'Calories': validated_data['Calories']}
         )
         return record

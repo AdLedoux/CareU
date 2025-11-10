@@ -2,21 +2,26 @@ from rest_framework import serializers
 from .models import SleepRecord
 
 class SleepRecordSerializer(serializers.ModelSerializer):
-    Id = serializers.UUIDField(source="user.user_id", read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
 
     class Meta:
         model = SleepRecord
         fields = [
-            "Id",
-            "SleepDay",
-            "TotalSleepRecords",
-            "TotalMinutesAsleep",
-            "TotalTimeInBed"
+            'id',
+            'username',
+            'user',
+            'SleepDay',
+            'TotalSleepRecords',
+            'TotalMinutesAsleep',
+            'TotalTimeInBed'
         ]
+        extra_kwargs = {
+            'user': {'write_only': True} 
+        }
 
     def create(self, validated_data):
-        sleep_day = validated_data['SleepDay']
         user = validated_data['user']
+        sleep_day = validated_data['SleepDay']
 
         record, created = SleepRecord.objects.update_or_create(
             user=user,

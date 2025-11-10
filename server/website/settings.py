@@ -15,10 +15,9 @@ from datetime import timedelta
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+load_dotenv()  # Load environment variables from .env file
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -60,19 +59,30 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "corsheaders",
     "api",
     "userInfo",
     "fitnessRecord",
     "heartRate",
+    "hourlyCalories",
     "sleepRecord",
     "activity",
     "weightlog",
-   "mood",
-    "ai_agent",,
-    "nutrition",                         # The Nutrition feature app
-    ]
+    "mood",
+    "ai_agent",
+    "nutrition",
+    "sleep",
+]
 
 MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -83,6 +93,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",  # CORS middleware (related to the origin issue ??????)
 ]
 
+ROOT_URLCONF = "website.urls"
 ROOT_URLCONF = "website.urls"
 
 TEMPLATES = [
