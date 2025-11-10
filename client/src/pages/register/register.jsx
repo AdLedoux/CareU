@@ -87,7 +87,7 @@ const Register = () => {
                 password,
             });
 
-            await api.post("/api/userInfo/basic/", {
+            await api.post("/api/userInfo/profile/", {
                 username,
                 age,
                 gender,
