@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class HealthrecordConfig(AppConfig):
+class FitnessrecordConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'healthRecord'
+    name = 'fitnessRecord'

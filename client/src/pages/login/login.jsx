@@ -25,7 +25,7 @@ const Login = () => {
             localStorage.setItem(ACCESS_TOKEN, res.data.access);
             localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
 
-            const userRes = await api.get("/api/userInfo/basic/", {
+            const userRes = await api.get("/api/userInfo/profile/", {
                 params: { username },
             });
 
