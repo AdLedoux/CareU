@@ -1,76 +1,48 @@
-import React from 'react';
-import "./styles.css"
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
 
-import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
-import AccessibilityIcon from '@mui/icons-material/Accessibility';
-import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
-import HearingIcon from '@mui/icons-material/Hearing';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import MedicationIcon from '@mui/icons-material/Medication';
-import AppleIcon from '@mui/icons-material/Apple';
-import BedIcon from '@mui/icons-material/Bed';
-import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import "./styles.css";
 
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import CardActionArea from '@mui/material/CardActionArea';
+import React from 'react'
+import { Calendar, momentLocalizer } from 'react-big-calendar'
+import moment from 'moment'
+import 'react-big-calendar/lib/css/react-big-calendar.css'
 
-const Home = () => {
-    const Icons = [
-        <LocalFireDepartmentIcon />,
-        <AccessibilityIcon />,
-        <DirectionsBikeIcon />,
-        <HearingIcon />,
-        <FavoriteIcon />,
-        <MedicationIcon />,
-        <AppleIcon />,
-        <BedIcon />,
-        <ChecklistRtlIcon />,
-        <FitnessCenterIcon />
-    ];
+const localizer = momentLocalizer(moment)
 
-    const item_list = ['Activity', 'Body Measurements', 'Cycle Tracking', 'Hearing', 'Heart', 'Medications', 'Nutrition', 'Sleep', 'Symptoms', 'Fitness']
+function HealthCalendar() {
+const events = [
+    {
+    title: 'Workout',
+    start: new Date(),
+    end: new Date(new Date().getTime() + 60 * 60 * 1000),
+    },
+]
 
-
-    return (
-        <Box sx={{ width: '100%' }}>
-            <Grid
-                container
-                spacing={2}
-                justifyContent={{ xs: 'center', sm: 'flex-start' }}
-            >
-                {item_list.map((item, index) => (
-                    <Grid
-                        item
-                        xs={12}
-                        sm={6}
-                        key={index}
-                        sx={{ display: 'flex', justifyContent: 'center' }}
-                    >
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardActionArea>
-                                <Box sx={{ display: 'flex', justifyContent: 'center', pt: 2 }}>
-                                    {Icons[index]}
-                                    <Typography gutterBottom variant="h6">
-                                        {item_list[index]}
-                                    </Typography>
-                                </Box>
-                                <CardContent>
-                                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                        Health activity summary
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
-                    </Grid>
-                ))}
-            </Grid>
-        </Box>
-    );
+return (
+    <div style={{ height: '80vh', padding: '1rem' }}>
+    <Calendar
+        localizer={localizer}
+        events={events}
+        startAccessor="start"
+        endAccessor="end"
+        defaultView="week"
+        style={{ height: '100%' }}
+    />
+    </div>
+)
 }
 
-export default Home;
+
+const Health = () => {
+
+    return ( <>
+        <h1> Medication Calendar </h1>
+        <hr/>
+        <HealthCalendar />
+        <h1> Glucose Entry </h1>
+        <hr/>
+        <h1> Doctor Note </h1>
+        <hr/>
+    </> );
+}
+
+export default Health;

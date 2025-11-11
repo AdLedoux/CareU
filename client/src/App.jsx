@@ -4,6 +4,7 @@ import Register from "./pages/register/register"
 import Home from "./pages/home/home"
 import Layout from "./components/layout/layout"
 import NotFound from "./pages/notFound/NotFound"
+import Health from "./pages/health/health"
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute"
 
 function Logout() {
@@ -28,6 +29,7 @@ function App() {
         }
       >
         <Route index element={<Home />} />
+        <Route path="health" element={<Health />} />
       </Route>
 
       <Route path="/login" element={<Login />} />

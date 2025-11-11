@@ -18,6 +18,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
     const Icons = [
@@ -26,14 +27,51 @@ const Home = () => {
         <DirectionsBikeIcon />,
         <HearingIcon />,
         <FavoriteIcon />,
-        <MedicationIcon />,
         <AppleIcon />,
         <BedIcon />,
         <ChecklistRtlIcon />,
         <FitnessCenterIcon />
     ];
 
-    const item_list = ['Activity', 'Body Measurements', 'Cycle Tracking', 'Hearing', 'Heart', 'Medications', 'Nutrition', 'Sleep', 'Symptoms', 'Fitness']
+    const item_list = [
+        // Names of the items to be displayed
+        'Activity', 
+        'Body Measurements', 
+        'Cycle Tracking', 
+        'Hearing', 
+        'Heart', 
+        'Nutrition', 
+        'Sleep', 
+        'Health', 
+        'Fitness'
+    ];
+
+    const item_description = [
+        // Descriptions for each item
+        "Daily activity summary",
+        "Body measurements overview",
+        "Cycle tracking details",
+        "Hearing health insights",
+        "Heart health statistics",
+        "Nutrition information",
+        "Sleep patterns analysis",
+        "Overall health summary",
+        "Fitness activity overview"
+    ];
+
+    const item_paths = [
+        // Paths for each item
+        '/',
+        '/',
+        '/',
+        '/',
+        '/',
+        '/',
+        '/',
+        '/health',
+        '/'
+    ];
+
 
 
     return (
@@ -52,7 +90,7 @@ const Home = () => {
                         sx={{ display: 'flex', justifyContent: 'center' }}
                     >
                         <Card sx={{ maxWidth: 345 }}>
-                            <CardActionArea>
+                            <CardActionArea component={Link} to={item_paths[index]}>
                                 <Box sx={{ display: 'flex', justifyContent: 'center', pt: 2 }}>
                                     {Icons[index]}
                                     <Typography gutterBottom variant="h6">
@@ -61,7 +99,7 @@ const Home = () => {
                                 </Box>
                                 <CardContent>
                                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                        Health activity summary
+                                        {item_description[index]}
                                     </Typography>
                                 </CardContent>
                             </CardActionArea>
