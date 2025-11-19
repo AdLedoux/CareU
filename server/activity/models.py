@@ -4,9 +4,7 @@ from userInfo.models import UserInfo
 
 # Create your models here.
 class Activity(models.Model):
-    user = models.ForeignKey(
-        UserInfo, on_delete=models.CASCADE, related_name="activities"
-    )
+    Id = models.BigIntegerField(primary_key=True)
     ActivityDate = models.DateField()
     TotalSteps = models.PositiveIntegerField()
     TotalDistance = models.FloatField()
