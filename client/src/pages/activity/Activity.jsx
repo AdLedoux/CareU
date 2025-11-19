@@ -1,142 +1,158 @@
-import { Card, Typography, Grid, Button, Box } from "@mui/material";
+import { Card, Typography, Grid, Box } from "@mui/material";
 import { Line } from "react-chartjs-2";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../../api";
 
 export default function Activity() {
-  const navigate = useNavigate();
+  const [dailyStepsChart, setDailyStepsChart] = useState(null);
+  const [dailyDistanceChart, setDailyDistanceChart] = useState(null);
+  const [dailyCaloriesChart, setDailyCaloriesChart] = useState(null);
+  const [rawDailyData, setRawDailyData] = useState([]);
 
-  const weeklySteps = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-    datasets: [
-      {
-        label: "Steps",
-        data: [8500, 9100, 7600, 10300, 9800, 5000, 7200],
-        borderColor: "#1976d2",
-        backgroundColor: "rgba(25,118,210,0.25)",
-        fill: true,
-        tension: 0.3,
-      },
-    ],
-  };
+  const userId = 1503960366;
 
-  const calorieTrend = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-    datasets: [
-      {
-        label: "Calories Burned (kcal)",
-        data: [280, 310, 295, 330, 350, 270, 260],
-        borderColor: "#ff9800",
-        backgroundColor: "rgba(255,152,0,0.25)",
-        fill: true,
-        tension: 0.3,
-      },
-    ],
-  };
+  useEffect(() => {
+    async function fetchDailyData() {
+      try {
+        const res = await api.get(`/api/activity/activity/${userId}/daily/`);
+        const data = Array.isArray(res.data) ? res.data : [];
+
+        setDailyStepsChart({
+          labels: data.map((d) => d.date),
+          datasets: [
+            {
+              label: "Steps",
+              data: data.map((d) => d.TotalSteps),
+              borderColor: "#1976d2",
+              backgroundColor: "rgba(25,118,210,0.25)",
+              fill: true,
+              tension: 0.3,
+            },
+          ],
+        });
+
+        setDailyDistanceChart({
+          labels: data.map((d) => d.date),
+          datasets: [
+            {
+              label: "Distance (km)",
+              data: data.map((d) => d.TotalDistance),
+              borderColor: "#4caf50",
+              backgroundColor: "rgba(76,175,80,0.25)",
+              fill: true,
+              tension: 0.3,
+            },
+          ],
+        });
+
+        setDailyCaloriesChart({
+          labels: data.map((d) => d.date),
+          datasets: [
+            {
+              label: "Calories",
+              data: data.map((d) => d.Calories),
+              borderColor: "#ff9800",
+              backgroundColor: "rgba(255,152,0,0.25)",
+              fill: true,
+              tension: 0.3,
+            },
+          ],
+        });
+        setRawDailyData(data);
+      } catch (err) {
+        console.error("Failed fetching daily data:", err);
+      }
+    }
+
+    fetchDailyData();
+  }, [userId]);
+
+  function computeSummaries(data) {
+    if (!data || data.length === 0) return null;
+    const sorted = [...data].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+    const latest = new Date(sorted[sorted.length - 1].date);
+    const weekStart = new Date(latest);
+    weekStart.setDate(latest.getDate() - 6);
+
+    let weekly = { TotalSteps: 0, TotalDistance: 0, Calories: 0 };
+    let monthly = { TotalSteps: 0, TotalDistance: 0, Calories: 0 };
+
+    for (const r of sorted) {
+      const d = new Date(r.date);
+      if (d >= weekStart && d <= latest) {
+        weekly.TotalSteps += Number(r.TotalSteps || 0);
+        weekly.TotalDistance += Number(r.TotalDistance || 0);
+        weekly.Calories += Number(r.Calories || 0);
+      }
+      if (d.getFullYear() === latest.getFullYear() && d.getMonth() === latest.getMonth()) {
+        monthly.TotalSteps += Number(r.TotalSteps || 0);
+        monthly.TotalDistance += Number(r.TotalDistance || 0);
+        monthly.Calories += Number(r.Calories || 0);
+      }
+    }
+
+    return {
+      latestDate: sorted[sorted.length - 1].date,
+      weekly,
+      monthly,
+    };
+  }
+
+  const summaries = computeSummaries(rawDailyData);
 
   const cardStyle = {
-    height: 360,
+    height: 500,
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
-    padding: 2,
+    alignItems: "center",
+    padding: 3,
+    width: "90vw",
+    maxWidth: "1200px",
+    marginBottom: 16,
   };
 
   const headerStyle = {
     color: "#1976d2",
     fontWeight: 700,
-    fontSize: "1.2rem",
+    fontSize: "1.6rem",
     textAlign: "center",
     marginBottom: 1,
   };
 
   const contentBoxStyle = {
     flexGrow: 1,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlign: "center",
+    width: "100%",
   };
 
   return (
-    <div style={{ padding: 24 }}>
-      {/* ✅ Flex container for heading and back button */}
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          mb: 2,
-        }}
-      >
-        <Typography variant="h5" gutterBottom sx={{ mb: 0 }}>
-          🏃 Activity Overview
-        </Typography>
+    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", padding: 3 }}>
+      {dailyStepsChart && (
+        <Card elevation={3} sx={cardStyle}>
+          <Typography sx={headerStyle}>Daily Steps</Typography>
+          <Box sx={contentBoxStyle}>
+            <Line data={dailyStepsChart} options={{ maintainAspectRatio: false }} />
+          </Box>
+        </Card>
+      )}
 
-        <Button
-          variant="outlined"
-          onClick={() => navigate("/")}
-          sx={{
-            color: "#1976d2",
-            borderColor: "#1976d2",
-            "&:hover": {
-              backgroundColor: "rgba(25,118,210,0.08)",
-              borderColor: "#115293",
-            },
-          }}
-        >
-          ← Back to Dashboard
-        </Button>
-      </Box>
+      {dailyDistanceChart && (
+        <Card elevation={3} sx={cardStyle}>
+          <Typography sx={headerStyle}>Daily Distance</Typography>
+          <Box sx={contentBoxStyle}>
+            <Line data={dailyDistanceChart} options={{ maintainAspectRatio: false }} />
+          </Box>
+        </Card>
+      )}
 
-      <Grid container spacing={2}>
-        {/* Card 1 */}
-        <Grid item xs={12} md={6}>
-          <Card elevation={3} sx={cardStyle}>
-            <Typography sx={headerStyle}>Today’s Summary</Typography>
-            <Box sx={contentBoxStyle}>
-              <Typography>Steps: 8 450</Typography>
-              <Typography>Calories: 310 kcal</Typography>
-              <Typography>Active Minutes: 47 min</Typography>
-              <Button variant="contained" sx={{ mt: 2 }}>
-                View Weekly Trend
-              </Button>
-            </Box>
-          </Card>
-        </Grid>
-
-        {/* Card 2 */}
-        <Grid item xs={12} md={6}>
-          <Card elevation={3} sx={cardStyle}>
-            <Typography sx={headerStyle}>7-Day Highlights</Typography>
-            <Box sx={contentBoxStyle}>
-              <Typography>Best Day: Fri (10 120 steps)</Typography>
-              <Typography>Lowest Day: Sun (3 900 steps)</Typography>
-              <Typography>Avg Calories: 295 kcal/day</Typography>
-            </Box>
-          </Card>
-        </Grid>
-
-        {/* Chart 1 */}
-        <Grid item xs={12} md={6}>
-          <Card elevation={3} sx={cardStyle}>
-            <Typography sx={headerStyle}>Weekly Steps Trend</Typography>
-            <Box sx={{ ...contentBoxStyle, width: "100%" }}>
-              <Line data={weeklySteps} />
-            </Box>
-          </Card>
-        </Grid>
-
-        {/* Chart 2 */}
-        <Grid item xs={12} md={6}>
-          <Card elevation={3} sx={cardStyle}>
-            <Typography sx={headerStyle}>Calories Trend</Typography>
-            <Box sx={{ ...contentBoxStyle, width: "100%" }}>
-              <Line data={calorieTrend} />
-            </Box>
-          </Card>
-        </Grid>
-      </Grid>
-    </div>
+      {dailyCaloriesChart && (
+        <Card elevation={3} sx={cardStyle}>
+          <Typography sx={headerStyle}>Daily Calories</Typography>
+          <Box sx={contentBoxStyle}>
+            <Line data={dailyCaloriesChart} options={{ maintainAspectRatio: false }} />
+          </Box>
+        </Card>
+      )}
+    </Box>
   );
 }
