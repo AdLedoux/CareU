@@ -15,6 +15,7 @@ urlpatterns = [
     
     # user info endpoints
     path("userInfo/", include("userInfo.urls")),
+    path("activity/", include("activity.urls")),
 ]
 
 

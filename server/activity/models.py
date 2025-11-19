@@ -1,16 +1,20 @@
 from django.db import models
 from userInfo.models import UserInfo
 
+
 # Create your models here.
 class Activity(models.Model):
-    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE, related_name="activities")
+    user = models.ForeignKey(
+        UserInfo, on_delete=models.CASCADE, related_name="activities"
+    )
     ActivityDate = models.DateField()
     TotalSteps = models.PositiveIntegerField()
     TotalDistance = models.FloatField()
     Calories = models.PositiveIntegerField()
-    
+
     def __str__(self):
         return self.user
+
 
 # sample data
 # {
