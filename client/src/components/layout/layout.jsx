@@ -140,7 +140,7 @@ const Layout = () => {
 
         setLastSynced(`${timeString} Today`);
     }, []);
-
+    
     const handleDrawerOpen = () => {
         setOpen(true);
     };
