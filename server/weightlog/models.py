@@ -1,19 +1,16 @@
 from django.db import models
-from userInfo.models import UserInfo
 
-# Create your models here.
 class WeightLog(models.Model):
-    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE, related_name="weight_logs")
+    Id = models.BigIntegerField()
     Date = models.DateTimeField()
     WeightKg = models.FloatField()
     WeightPounds = models.FloatField()
     Fat = models.FloatField(null=True, blank=True)
     BMI = models.FloatField(null=True, blank=True)
-    LogId = models.BigIntegerField(unique=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.WeightKg} kg ({self.Date.date()})"
-    
+        return f"{self.Id} - {self.WeightKg} kg ({self.Date.date()})"
+
 #     e.g.
 #       {
 #     "Id": 1503960366,
