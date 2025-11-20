@@ -1,5 +1,4 @@
 from django.db import models
-from userInfo.models import UserInfo
 
 class HeartRate(models.Model):
     user = models.ForeignKey(
