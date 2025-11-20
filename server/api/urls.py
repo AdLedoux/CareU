@@ -16,6 +16,7 @@ urlpatterns = [
     path("activity/", include("activity.urls")),
     path("weightlog/", include("weightlog.urls")),
     path("heartRate/", include("heartRate.urls")),
+    path("sleep/", include("sleepRecord.urls")),
 ]
 
 

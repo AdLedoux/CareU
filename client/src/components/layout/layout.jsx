@@ -138,7 +138,6 @@ const Layout = () => {
             hour12: true,
         });
 
-        const options = { weekday: 'short' };
         setLastSynced(`${timeString} Today`);
     }, []);
     

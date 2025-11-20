@@ -11,6 +11,7 @@ import Activity from "./pages/activity/Activity"
 import Body from "./pages/body/Body"
 import Cycle from "./pages/cycle/Cycle"
 import Heart from "./pages/heart/Heart"
+import Sleep from "./pages/sleep/Sleep"
 
 function Logout() {
   localStorage.clear()
@@ -39,6 +40,7 @@ function App() {
         <Route path="body-measurements" element={<Body />} />
         <Route path="cycle-tracking" element={<Cycle />} />
         <Route path="heart" element={<Heart />} />
+        <Route path="sleep" element={<Sleep />} />
       </Route>
 
       <Route path="/login" element={<Login />} />
