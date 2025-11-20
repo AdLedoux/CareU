@@ -140,7 +140,7 @@ const Layout = () => {
 
         setLastSynced(`${timeString} Today`);
     }, []);
-    
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -156,7 +156,8 @@ const Layout = () => {
                 position="fixed"
                 open={open}
                 sx={{
-                    background: '#ffd6e8 0%',
+                    background: 'honeydew',
+                    // background: rgb(241, 241, 241),
                     color: "black",
                     boxShadow: "none"
                 }}
