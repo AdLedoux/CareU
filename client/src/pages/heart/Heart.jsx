@@ -1,149 +1,103 @@
-import { Card, Typography, Grid, Box, Button } from "@mui/material";
+import { Card, Typography, Box } from "@mui/material";
 import { Line } from "react-chartjs-2";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../../api";
 
 export default function Heart() {
-  const navigate = useNavigate();
+  const [hourlyChart, setHourlyChart] = useState(null);
+  const [latestValue, setLatestValue] = useState(null);
 
-  const hrTrend = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-    datasets: [
-      {
-        label: "Resting HR (BPM)",
-        data: [72, 74, 70, 75, 71, 69, 73],
-        borderColor: "#e53935",
-        backgroundColor: "rgba(229,57,53,0.15)",
-        fill: true,
-        tension: 0.3,
-      },
-    ],
-  };
+  const userId = 2022484408;
 
-  const bpTrend = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-    datasets: [
-      {
-        label: "Systolic (mmHg)",
-        data: [118, 120, 122, 119, 121, 117, 118],
-        borderColor: "#ef6c00",
-        backgroundColor: "rgba(239,108,0,0.15)",
-        fill: true,
-        tension: 0.3,
-      },
-      {
-        label: "Diastolic (mmHg)",
-        data: [78, 77, 79, 80, 76, 75, 77],
-        borderColor: "#43a047",
-        backgroundColor: "rgba(67,160,71,0.15)",
-        fill: true,
-        tension: 0.3,
-      },
-    ],
-  };
+  useEffect(() => {
+    async function fetchHeartData() {
+      try {
+        const res = await api.get(`/api/heartRate/heart/${userId}/`);
+        const data = Array.isArray(res.data) ? res.data : [];
+
+        if (data.length > 0) {
+          const sorted = [...data].sort((a, b) =>
+            new Date(a.Time) - new Date(b.Time)
+          );
+          setLatestValue(sorted[sorted.length - 1]);
+        }
+
+        setHourlyChart({
+          labels: data.map((d) =>
+            new Date(d.Time).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          ),
+          datasets: [
+            {
+              label: "Heart Rate (BPM)",
+              data: data.map((d) => d.Value),
+              borderColor: "#e53935",
+              backgroundColor: "rgba(229,57,53,0.25)",
+              fill: true,
+              tension: 0.3,
+            },
+          ],
+        });
+      } catch (err) {
+        console.error("Failed fetching heart data:", err);
+      }
+    }
+
+    fetchHeartData();
+  }, [userId]);
 
   const cardStyle = {
-    height: 360,
+    height: 320,
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
-    padding: 2,
+    alignItems: "center",
+    padding: 3,
+    width: "90vw",
+    maxWidth: "1000px",
+    marginBottom: 16,
   };
 
   const headerStyle = {
-    color: "#1976d2",
+    color: "#e53935",
     fontWeight: 700,
-    fontSize: "1.2rem",
+    fontSize: "1.6rem",
     textAlign: "center",
-    marginBottom: 1,
-  };
-
-  const contentBoxStyle = {
-    flexGrow: 1,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlign: "center",
+    marginBottom: 2,
   };
 
   return (
-    <div style={{ padding: 24 }}>
-      {/* Header row */}
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          mb: 2,
-        }}
-      >
-        <Typography variant="h5" gutterBottom sx={{ mb: 0 }}>
-          ❤️ Heart Health
-        </Typography>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: 3,
+      }}
+    >
+      {latestValue && (
+        <Card elevation={3} sx={cardStyle}>
+          <Typography sx={headerStyle}>Current Heart Rate</Typography>
+          <Typography sx={{ fontSize: "2.4rem", fontWeight: 700 }}>
+            {latestValue.Value} BPM
+          </Typography>
+          <Typography sx={{ marginTop: 1, color: "#666" }}>
+            Last Measurement:{" "}
+            {new Date(latestValue.Time).toLocaleString()}
+          </Typography>
+        </Card>
+      )}
 
-        <Button
-          variant="outlined"
-          onClick={() => navigate("/")}
-          sx={{
-            color: "#1976d2",
-            borderColor: "#1976d2",
-            "&:hover": {
-              backgroundColor: "rgba(25,118,210,0.08)",
-              borderColor: "#115293",
-            },
-          }}
-        >
-          ← Back to Dashboard
-        </Button>
-      </Box>
-
-      <Grid container spacing={2}>
-        {/* Card 1 */}
-        <Grid item xs={12} md={6}>
-          <Card elevation={3} sx={cardStyle}>
-            <Typography sx={headerStyle}>Current Readings</Typography>
-            <Box sx={contentBoxStyle}>
-              <Typography>Resting HR: 72 BPM</Typography>
-              <Typography>Max HR Today: 132 BPM</Typography>
-              <Typography>Avg This Week: 76 BPM</Typography>
-            </Box>
-          </Card>
-        </Grid>
-
-        {/* Card 2 */}
-        <Grid item xs={12} md={6}>
-          <Card elevation={3} sx={cardStyle}>
-            <Typography sx={headerStyle}>Insights</Typography>
-            <Box sx={contentBoxStyle}>
-              <Typography>
-                Your heart rate is within a healthy range for your age group.
-              </Typography>
-              <Typography>
-                Keep resting HR below 80 BPM for optimal fitness.
-              </Typography>
-            </Box>
-          </Card>
-        </Grid>
-
-        {/* Charts */}
-        <Grid item xs={12} md={6}>
-          <Card elevation={3} sx={cardStyle}>
-            <Typography sx={headerStyle}>Heart Rate Trend</Typography>
-            <Box sx={{ ...contentBoxStyle, width: "100%" }}>
-              <Line data={hrTrend} />
-            </Box>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <Card elevation={3} sx={cardStyle}>
-            <Typography sx={headerStyle}>Blood Pressure Trend</Typography>
-            <Box sx={{ ...contentBoxStyle, width: "100%" }}>
-              <Line data={bpTrend} />
-            </Box>
-          </Card>
-        </Grid>
-      </Grid>
-    </div>
+      {hourlyChart && (
+        <Card elevation={3} sx={{ ...cardStyle, height: 500 }}>
+          <Typography sx={headerStyle}>Hourly Heart Rate Trend</Typography>
+          <Box sx={{ flexGrow: 1, width: "100%" }}>
+            <Line data={hourlyChart} options={{ maintainAspectRatio: false }} />
+          </Box>
+        </Card>
+      )}
+    </Box>
   );
 }
