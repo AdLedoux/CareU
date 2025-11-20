@@ -156,7 +156,7 @@ const Layout = () => {
                 position="fixed"
                 open={open}
                 sx={{
-                    background: '#ffd6e8 0%',
+                    background:"honeydew",
                     color: "black",
                     boxShadow: "none"
                 }}

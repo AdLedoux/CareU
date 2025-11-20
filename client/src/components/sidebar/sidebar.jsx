@@ -9,7 +9,6 @@ import List from '@mui/material/List';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import AccessibilityIcon from '@mui/icons-material/Accessibility';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
-import HearingIcon from '@mui/icons-material/Hearing';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import MedicationIcon from '@mui/icons-material/Medication';
 import AppleIcon from '@mui/icons-material/Apple';
@@ -27,7 +26,6 @@ const Sidebar = (props) => {
         <LocalFireDepartmentIcon />,
         <AccessibilityIcon />,
         <DirectionsBikeIcon />,
-        <HearingIcon />,
         <FavoriteIcon />,
         <MedicationIcon />,
         <AppleIcon />,
@@ -36,8 +34,8 @@ const Sidebar = (props) => {
         <FitnessCenterIcon />
     ];
 
-    const item_list = ['Home', 'Activity', 'Body Measurements', 'Cycle Tracking', 'Hearing', 'Heart', 'Medications', 'Nutrition', 'Sleep', 'Symptoms', 'Fitness']
-    const linklist = ['/', '/activity', '/body-measurements', '/cycle-tracking', '/hearing', '/heart', '/medications', '/nutrition', '/sleep', '/symptoms', '/fitness']
+    const item_list = ['Home', 'Activity', 'Body Measurements', 'Cycle Tracking', 'Heart', 'Medications', 'Nutrition', 'Sleep', 'Symptoms', 'Fitness']
+    const linklist = ['/', '/activity', '/body-measurements', '/cycle-tracking', '/heart', '/medications', '/nutrition', '/sleep', '/symptoms', '/fitness']
 
     return (
         <>
