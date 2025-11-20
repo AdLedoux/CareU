@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "./styles.css"
 import { Outlet } from "react-router-dom";
 import { styled, useTheme } from '@mui/material/styles';
@@ -128,6 +128,20 @@ const Layout = () => {
     const [open, setOpen] = React.useState(true);
     const user = useSelector((state) => state.user);
 
+    const [lastSynced, setLastSynced] = useState("");
+
+    useEffect(() => {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+        });
+
+        const options = { weekday: 'short' };
+        setLastSynced(`${timeString} Today`);
+    }, []);
+    
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -167,7 +181,7 @@ const Layout = () => {
                         <Typography variant="h5" noWrap component="div" sx={{ fontWeight: '600' }}>
                             {user.username}
                             <Typography variant="body1" sx={{ fontWeight: '200' }}>
-                                Last synced: 10:09 AM Today
+                                Last synced: {lastSynced}
                             </Typography>
                             <Button variant="text" onClick={handleClickLogout}>Logout</Button>
                         </Typography>
@@ -214,16 +228,16 @@ const Layout = () => {
                     <Typography variant="h5" noWrap component="div" sx={{ fontWeight: '600' }}>
                         {user.username}
                         <Typography variant="body1" sx={{ fontWeight: '200' }}>
-                            Last synced: 10:09 AM Today
+                            Last synced: {lastSynced}
                         </Typography>
                         <Button variant="text" onClick={handleClickLogout}>Logout</Button>
                     </Typography>
                 </Box>
-                {/* main content will be render here*/}
-                <Outlet />
 
+                <Outlet />
             </Box>
-        </Box>)
+        </Box>
+    )
 }
 
 export default Layout;
