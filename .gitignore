@@ -212,6 +212,6 @@ marimo/_lsp/
 __marimo__/
 
 # SQLite DB
-*.sqlite
-*.sqlite3
+*.db.sqlite
+*.db.sqlite3
 server/db.sqlite3
