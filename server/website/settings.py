@@ -61,10 +61,10 @@ INSTALLED_APPS = [
     "userInfo",
     "fitnessRecord",
     "heartRate",
-    "hourlyCalories",
     "sleepRecord",
     "activity",
     "weightlog",
+    "mood",
 ]
 
 MIDDLEWARE = [
