@@ -1,155 +1,88 @@
-import { Card, CardContent, Typography, Grid, TextField, Button, Box } from "@mui/material";
+import { Card, Typography, Box } from "@mui/material";
 import { Line } from "react-chartjs-2";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../../api";
 
 export default function Fitness() {
-  const navigate = useNavigate();
+  const [fitnessChart, setFitnessChart] = useState(null);
+  const userId = 1503960366;
 
-  const cycleLengths = {
-    labels: ["Aug", "Sep", "Oct", "Nov"],
-    datasets: [
-      {
-        label: "Cycle Length (days)",
-        data: [27, 28, 29, 28],
-        borderColor: "#ec407a",
-        backgroundColor: "rgba(236,64,122,0.2)",
-        fill: true,
-        tension: 0.3,
-      },
-    ],
-  };
+  useEffect(() => {
+    async function fetchFitnessData() {
+      try {
+        const res = await api.get(`/api/fitness/${userId}/`);
+        const data = Array.isArray(res.data) ? res.data : [];
 
-  const symptomCounts = {
-    labels: ["Mood", "Cramps", "Headache", "Fatigue"],
-    datasets: [
-      {
-        label: "Occurrences (Last 4 Cycles)",
-        data: [5, 7, 3, 6],
-        backgroundColor: "rgba(255,99,132,0.6)",
-      },
-    ],
-  };
+        const sorted = [...data].sort(
+          (a, b) => new Date(a.ActivityHour) - new Date(b.ActivityHour)
+        );
+
+        setFitnessChart({
+          labels: sorted.map(r =>
+            new Date(r.ActivityHour).toLocaleString()
+          ),
+          datasets: [
+            {
+              label: "Total Intensity",
+              data: sorted.map(r => r.TotalIntensity ?? 0),
+              borderColor: "#3f51b5",
+              backgroundColor: "rgba(63,81,181,0.25)",
+              fill: true,
+              tension: 0.3,
+            },
+            {
+              label: "Average Intensity",
+              data: sorted.map(r => r.AverageIntensity ?? 0),
+              borderColor: "#f50057",
+              backgroundColor: "rgba(245,0,87,0.25)",
+              fill: true,
+              tension: 0.3,
+            },
+          ],
+        });
+      } catch (err) {
+        console.error("Failed fetching fitness data:", err);
+      }
+    }
+
+    fetchFitnessData();
+  }, [userId]);
 
   const cardStyle = {
-    height: 360,
     display: "flex",
     flexDirection: "column",
-    justifyContent: "flex-start",
-    padding: 2,
+    padding: 3,
+    width: "90vw",
+    maxWidth: 1000,
+    marginBottom: 16,
+    height: 400,
   };
 
   const headerStyle = {
-    color: "#1976d2",
+    color: "#3f51b5",
     fontWeight: 700,
-    fontSize: "1.2rem",
+    fontSize: "1.6rem",
     textAlign: "center",
-    marginBottom: 1,
-  };
-
-  const contentBoxStyle = {
-    flexGrow: 1,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    textAlign: "center",
+    marginBottom: 2,
   };
 
   return (
-    <div style={{ padding: 24 }}>
-      {/* Header row */}
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          mb: 2,
-        }}
-      >
-        <Typography variant="h5" gutterBottom sx={{ mb: 0 }}>
-          📅 Fitness Tracking
-        </Typography>
-
-        <Button
-          variant="outlined"
-          onClick={() => navigate("/")}
-          sx={{
-            color: "#1976d2",
-            borderColor: "#1976d2",
-            "&:hover": {
-              backgroundColor: "rgba(25,118,210,0.08)",
-              borderColor: "#115293",
-            },
-          }}
-        >
-          ← Back to Dashboard
-        </Button>
-      </Box>
-
-      <Grid container spacing={2}>
-        {/* Cards and charts remain unchanged */}
-        <Grid item xs={12} md={6}>
-          <Card elevation={3} sx={cardStyle}>
-            <CardContent>
-              <Typography sx={headerStyle}>Latest Record</Typography>
-              <Box sx={contentBoxStyle}>
-                <Typography>Start: Nov 1 2025</Typography>
-                <Typography>Length: 28 days</Typography>
-                <Typography>Next: Nov 29 2025</Typography>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <Card elevation={3} sx={cardStyle}>
-            <CardContent>
-              <Typography sx={headerStyle}>Add Fitness Info</Typography>
-              <Box sx={contentBoxStyle}>
-                <TextField
-                  type="date"
-                  label="Start Date"
-                  InputLabelProps={{ shrink: true }}
-                  fullWidth
-                  margin="dense"
-                />
-                <TextField
-                  label="Notes / Symptoms"
-                  multiline
-                  rows={2}
-                  fullWidth
-                  margin="dense"
-                />
-                <Button variant="contained" sx={{ mt: 2 }}>
-                  Save
-                </Button>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <Card elevation={3} sx={cardStyle}>
-            <CardContent>
-              <Typography sx={headerStyle}>Fitness Length History</Typography>
-              <Box sx={{ ...contentBoxStyle, width: "100%" }}>
-                <Line data={cycleLengths} />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <Card elevation={3} sx={cardStyle}>
-            <CardContent>
-              <Typography sx={headerStyle}>Symptom Frequency</Typography>
-              <Box sx={{ ...contentBoxStyle, width: "100%" }}>
-                <Line data={symptomCounts} />
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-    </div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: 3,
+      }}
+    >
+      {fitnessChart && (
+        <Card elevation={3} sx={cardStyle}>
+          <Typography sx={headerStyle}>Fitness Intensity Trend</Typography>
+          <Box sx={{ flexGrow: 1, width: "100%" }}>
+            <Line data={fitnessChart} options={{ maintainAspectRatio: false }} />
+          </Box>
+        </Card>
+      )}
+    </Box>
   );
 }
