@@ -1,5 +1,3 @@
-import os
-import json
 from datetime import datetime
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,51 +7,50 @@ from .models import FitnessRecord
 from .serializers import FitnessRecordSerializer
 from userInfo.models import UserInfo
 
-def load_hourly_json():
-    json_path = os.path.join(os.path.dirname(__file__), "hourlyIntensities_merged.json")
-    if not os.path.exists(json_path):
-        return None
-    with open(json_path, "r", encoding="utf-8") as f:
-        return json.load(f)
 
 class FitnessRecordListByUser(APIView):
     permission_classes = [AllowAny]
 
-    def get(self, request, user_id):
-        data = load_hourly_json()
-        if data is None:
-            return Response({"detail": "JSON file not found."}, status=500)
+    def get(self, request, user_id=None):
+        uid = user_id or request.query_params.get("Id")
+        if not uid:
+            return Response({"detail": "user id required"}, status=400)
 
-        records = [r for r in data if int(r.get("Id")) == user_id]
+        qs = FitnessRecord.objects.filter(user__user_id=uid).order_by("-created_at")
 
         date_str = request.query_params.get("date")
-        def parse_hour(t):
-            for fmt in ("%m/%d/%Y %I:%M:%S %p", "%Y-%m-%d %H:%M:%S"):
-                try:
-                    return datetime.strptime(t, fmt)
-                except:
-                    continue
-            return None
-
         if date_str:
             try:
                 target_date = datetime.strptime(date_str, "%Y-%m-%d").date()
-                records = [
-                    r for r in records
-                    if parse_hour(r["ActivityHour"]) and parse_hour(r["ActivityHour"]).date() == target_date
-                ]
+                qs = qs.filter(created_at__date=target_date)
             except ValueError:
                 return Response({"error": "Invalid date format, use YYYY-MM-DD"}, status=400)
 
-        records.sort(key=lambda r: parse_hour(r["ActivityHour"]) or datetime.min)
-        return Response(records, status=200)
+        serializer = FitnessRecordSerializer(qs, many=True)
+        return Response(serializer.data, status=200)
+
 
 class FitnessRecordCreateView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        serializer = FitnessRecordSerializer(data=request.data)
-        if serializer.is_valid():
-            record = serializer.save()
-            return Response(FitnessRecordSerializer(record).data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # Expect: Id (user.user_id), activity_type, duration_minutes (optional)
+        user_id = request.data.get("Id")
+        if not user_id:
+            return Response({"detail": "Id (user_id) is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = UserInfo.objects.get(user_id=user_id)
+        except UserInfo.DoesNotExist:
+            return Response({"detail": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        activity_type = request.data.get("activity_type", "")
+        duration = request.data.get("duration_minutes")
+
+        record = FitnessRecord.objects.create(
+            user=user,
+            activity_type=activity_type,
+            duration_minutes=int(duration) if (duration is not None and str(duration) != "") else 0,
+        )
+        serializer = FitnessRecordSerializer(record)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
