@@ -20,8 +20,9 @@ urlpatterns = [
     path("mood/", include("mood.urls")),
     path("fitness/", include("fitnessRecord.urls")),
     path("nutrition/", include("nutrition.urls")),
-    path("heartRate/", include("heartRate.urls")),
-    path("heartRate/", include("heartRate.urls")),
+    #ai agnet
+    path("ai/", include("ai_agent.urls")),
+    
 ]
 
 

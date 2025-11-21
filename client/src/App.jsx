@@ -42,13 +42,11 @@ function App() {
         <Route path="activity" element={<Activity />} />
         <Route path="body" element={<Body />} />
         <Route path="body-measurements" element={<Body />} />
-        <Route path="cycle" element={<Cycle />} />
-        <Route path="cycle-tracking" element={<Cycle />} />
+        <Route path="fitness" element={<Fitness />} />
         <Route path="heart" element={<Heart />} />
         <Route path="nutrition" element={<Nutrition />} />
         <Route path="sleep" element={<Sleep />} />
-        <Route path="sleep" element={<Sleep />} />
-        <Route path="nutrition" element={<Nutrition />} />
+        <Route path="moods" element={<Mood />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/logout" element={<Logout />} />
