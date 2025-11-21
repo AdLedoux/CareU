@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Card,
@@ -15,11 +15,14 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 
-// Import images from the app assets (paths relative to this file)
 import moodImg from "../../assets/images/mood.jpg";
 import emoImg from "../../assets/images/emo.jpg";
+import { useSelector } from "react-redux";
+import api from "../../api";
 
 const MOOD_TAGS = [
   "Happy", "Joyful", "Relaxed", "Cheerful", "Fulfilled",
@@ -39,6 +42,30 @@ export default function Mood() {
   const [moodCause, setMoodCause] = useState("");
 
   const [moodRecords, setMoodRecords] = useState([]);
+  const userId = useSelector((state) => state.user.user_id);
+
+  const [snack, setSnack] = useState({ open: false, message: "", severity: "info" });
+
+  useEffect(() => {
+    fetchMoods();
+  }, [userId]);
+
+  async function fetchMoods() {
+    try {
+      if (!userId) return;
+      const res = await api.get(`/api/mood/moods/${userId}/`);
+      const data = Array.isArray(res.data) ? res.data : [];
+      const normalized = data.map((it) => ({
+        ...it,
+        time: it.timestamp || it.time || new Date().toLocaleString(),
+        mood: it.mood_tag || it.mood || "",
+        cause: it.mood_cause || it.cause || "",
+      }));
+      setMoodRecords(normalized);
+    } catch (err) {
+      console.error("Failed to fetch moods:", err);
+    }
+  }
 
   const handleConfirm = (choice) => {
     if (choice === "no") {
@@ -49,13 +76,33 @@ export default function Mood() {
   };
 
   const handleSaveMood = () => {
-    const newRecord = {
-      time: new Date().toLocaleString(),
-      mood: moodTag,
-      cause: moodCause,
-    };
-    setMoodRecords((prev) => [newRecord, ...prev]);
-    setOpen(false);
+    (async () => {
+      try {
+        const payload = {
+          Id: userId,
+          mood_tag: moodTag,
+          mood_cause: moodCause,
+        };
+        const res = await api.post("/api/mood/moods/add/", payload);
+        if (res && res.data) {
+          const it = res.data;
+          const norm = {
+            ...it,
+            time: it.timestamp || new Date().toLocaleString(),
+            mood: it.mood_tag || "",
+            cause: it.mood_cause || "",
+          };
+          setMoodRecords((prev) => [norm, ...prev]);
+          setSnack({ open: true, message: "Mood saved", severity: "success" });
+        } else {
+          setSnack({ open: true, message: "Saved but no server data returned", severity: "warning" });
+        }
+        setOpen(false);
+      } catch (err) {
+        console.error("Failed to save mood:", err);
+        setSnack({ open: true, message: "Failed to save mood", severity: "error" });
+      }
+    })();
   };
 
   return (
@@ -175,3 +222,4 @@ export default function Mood() {
     </Box>
   );
 }
+
