@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { setUserInfo } from "../../redux/userSlice";
 import FormLabel from '@mui/material/FormLabel';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-
 import "./styles.css";
 
 const Login = () => {
@@ -30,7 +29,6 @@ const Login = () => {
             });
 
             dispatch(setUserInfo(userRes.data));
-
             navigate("/");
         } catch (error) {
             console.error("Login failed:", error);
