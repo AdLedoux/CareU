@@ -21,8 +21,8 @@ import {
 
 import moodImg from "../../assets/images/mood.jpg";
 import emoImg from "../../assets/images/emo.jpg";
-import { useSelector } from "react-redux";
-import api from "../../api";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchMoods, createMood } from "../../redux/moodSlice";
 
 const MOOD_TAGS = [
   "Happy", "Joyful", "Relaxed", "Cheerful", "Fulfilled",
@@ -41,31 +41,16 @@ export default function Mood() {
   const [moodTag, setMoodTag] = useState("");
   const [moodCause, setMoodCause] = useState("");
 
-  const [moodRecords, setMoodRecords] = useState([]);
   const userId = useSelector((state) => state.user.user_id);
+  const moodItems = useSelector((state) => state.mood.items || []);
+  const dispatch = useDispatch();
 
   const [snack, setSnack] = useState({ open: false, message: "", severity: "info" });
 
   useEffect(() => {
-    fetchMoods();
-  }, [userId]);
-
-  async function fetchMoods() {
-    try {
-      if (!userId) return;
-      const res = await api.get(`/api/mood/moods/${userId}/`);
-      const data = Array.isArray(res.data) ? res.data : [];
-      const normalized = data.map((it) => ({
-        ...it,
-        time: it.timestamp || it.time || new Date().toLocaleString(),
-        mood: it.mood_tag || it.mood || "",
-        cause: it.mood_cause || it.cause || "",
-      }));
-      setMoodRecords(normalized);
-    } catch (err) {
-      console.error("Failed to fetch moods:", err);
-    }
-  }
+    if (!userId) return;
+    dispatch(fetchMoods(userId));
+  }, [userId, dispatch]);
 
   const handleConfirm = (choice) => {
     if (choice === "no") {
@@ -75,34 +60,21 @@ export default function Mood() {
     setStep("moodTag");
   };
 
-  const handleSaveMood = () => {
-    (async () => {
-      try {
-        const payload = {
-          Id: userId,
-          mood_tag: moodTag,
-          mood_cause: moodCause,
-        };
-        const res = await api.post("/api/mood/moods/add/", payload);
-        if (res && res.data) {
-          const it = res.data;
-          const norm = {
-            ...it,
-            time: it.timestamp || new Date().toLocaleString(),
-            mood: it.mood_tag || "",
-            cause: it.mood_cause || "",
-          };
-          setMoodRecords((prev) => [norm, ...prev]);
-          setSnack({ open: true, message: "Mood saved", severity: "success" });
-        } else {
-          setSnack({ open: true, message: "Saved but no server data returned", severity: "warning" });
-        }
-        setOpen(false);
-      } catch (err) {
-        console.error("Failed to save mood:", err);
-        setSnack({ open: true, message: "Failed to save mood", severity: "error" });
-      }
-    })();
+  const handleSaveMood = async () => {
+    try {
+      const payload = {
+        Id: userId,
+        mood_tag: moodTag,
+        mood_cause: moodCause,
+      };
+      const result = await dispatch(createMood(payload)).unwrap();
+      // createMood thunk already pushes the created item into the slice's items
+      setSnack({ open: true, message: "Mood saved", severity: "success" });
+      setOpen(false);
+    } catch (err) {
+      console.error("Failed to save mood:", err);
+      setSnack({ open: true, message: "Failed to save mood", severity: "error" });
+    }
   };
 
   return (
@@ -202,23 +174,33 @@ export default function Mood() {
               <TableCell><strong>Cause</strong></TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {moodRecords.map((rec, i) => (
-              <TableRow key={i}>
-                <TableCell>{rec.time}</TableCell>
-                <TableCell>{rec.mood}</TableCell>
-                <TableCell>{rec.cause}</TableCell>
-              </TableRow>
-            ))}
+            <TableBody>
+            {moodItems.map((it, i) => {
+              const time = it.timestamp || it.time || new Date().toLocaleString();
+              const mood = it.mood_tag || it.mood || "";
+              const cause = it.mood_cause || it.cause || "";
+              return (
+                <TableRow key={i}>
+                  <TableCell>{time}</TableCell>
+                  <TableCell>{mood}</TableCell>
+                  <TableCell>{cause}</TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
 
-        {moodRecords.length === 0 && (
+        {moodItems.length === 0 && (
           <Typography sx={{ mt: 2, color: "#999", textAlign: "center" }}>
             No mood records yet
           </Typography>
         )}
       </Card>
+      <Snackbar open={snack.open} autoHideDuration={4000} onClose={() => setSnack((s)=>({...s, open:false}))} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+        <Alert onClose={() => setSnack((s)=>({...s, open:false}))} severity={snack.severity} sx={{ width: '100%' }}>
+          {snack.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
