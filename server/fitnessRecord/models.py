@@ -10,7 +10,8 @@ class FitnessRecord(models.Model):
         db_column="user_id",
     )
     ActivityHour = models.DateTimeField()
-    StepTotal = models.IntegerField()
+    TotalIntensity = models.IntegerField(default=0)
+    AverageIntensity = models.FloatField(default=0.0)
 
     def __str__(self):
-        return f"{self.user.user_id} - {self.ActivityHour.strftime('%Y-%m-%d %H:%M')} - {self.StepTotal} steps"
+        return f"{self.user.user_id} - {self.ActivityHour.strftime('%Y-%m-%d %H:%M')} - Total:{self.TotalIntensity}, Avg:{self.AverageIntensity}"

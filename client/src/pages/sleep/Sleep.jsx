@@ -14,7 +14,6 @@ export default function Sleep() {
         const res = await api.get(`/api/sleep/sleep/${userId}/`);
         const data = Array.isArray(res.data) ? res.data : [];
 
-        // 按日期排序
         const sorted = [...data].sort(
           (a, b) => new Date(a.SleepDay) - new Date(b.SleepDay)
         );
