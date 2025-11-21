@@ -17,6 +17,10 @@ import {
   TableBody,
 } from "@mui/material";
 
+// Import images from the app assets (paths relative to this file)
+import moodImg from "../../assets/images/mood.jpg";
+import emoImg from "../../assets/images/emo.jpg";
+
 const MOOD_TAGS = [
   "Happy", "Joyful", "Relaxed", "Cheerful", "Fulfilled",
   "Sad", "Depressed", "Angry", "Anxious", "Stressed", "Down"
@@ -64,6 +68,7 @@ export default function Mood() {
       >
         {step === "confirm" && (
           <>
+            <img src={moodImg} alt="select your mood" style={{ width: "100%", maxWidth: 360, height: "auto", display: "block", margin: "0 auto 12px" }} />
             <DialogTitle>Select your overall feeling today</DialogTitle>
             <DialogActions>
               <Button variant="outlined" onClick={() => handleConfirm("no")}>
@@ -78,6 +83,7 @@ export default function Mood() {
 
         {step === "moodTag" && (
           <>
+            <img src={emoImg} alt="select your mood" style={{ width: "100%", maxWidth: 360, height: "auto", display: "block", margin: "0 auto 12px" }} />
             <DialogTitle>Which one best describes this feeling?</DialogTitle>
             <DialogContent>
               <ToggleButtonGroup
@@ -107,6 +113,7 @@ export default function Mood() {
 
         {step === "moodCause" && (
           <>
+            <img src={emoImg} alt="select your emo" style={{ width: "100%", maxWidth: 360, height: "auto", display: "block", margin: "0 auto 12px" }} />
             <DialogTitle>What influenced your mood?</DialogTitle>
             <DialogContent>
               <ToggleButtonGroup
