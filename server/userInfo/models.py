@@ -1,8 +1,9 @@
 from django.db import models
+import uuid
 
-# Create your models here.
 class UserInfo(models.Model):
-    username = models.CharField(max_length=100)
+    user_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    username = models.CharField(max_length=100, unique=True)
     age = models.IntegerField()
     gender = models.CharField(max_length=10)
     height = models.IntegerField()
