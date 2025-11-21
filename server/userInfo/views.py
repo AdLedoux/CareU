@@ -1,21 +1,26 @@
 # userInfo/views.py
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from .models import UserInfo
 from .serializers import UserInfoSerializer
+from uuid import UUID
+
 
 class UserInfoView(generics.GenericAPIView):
     serializer_class = UserInfoSerializer
     permission_classes = [AllowAny]
 
     def get(self, request):
-        username = request.query_params.get("username")
-        if not username:
-            return Response({"error": "username is required"}, status=400)
+        user_id = request.query_params.get("user_id")
+        if not user_id:
+            return Response({"error": "user_id is required"}, status=400)
 
         try:
-            user_info = UserInfo.objects.get(username=username)
+            user_uuid = UUID(user_id, version=4)
+            user_info = UserInfo.objects.get(user_id=user_uuid)
+        except ValueError:
+            return Response({"error": "Invalid user_id format"}, status=400)
         except UserInfo.DoesNotExist:
             return Response({"error": "User info not found"}, status=404)
 
