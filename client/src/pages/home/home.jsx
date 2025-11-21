@@ -5,13 +5,12 @@ import Box from '@mui/material/Box';
 
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import AccessibilityIcon from '@mui/icons-material/Accessibility';
-import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import MedicationIcon from '@mui/icons-material/Medication';
 import AppleIcon from '@mui/icons-material/Apple';
 import BedIcon from '@mui/icons-material/Bed';
-import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -22,17 +21,16 @@ const Home = () => {
     const Icons = [
         <LocalFireDepartmentIcon />,
         <AccessibilityIcon />,
-        <DirectionsBikeIcon />,
+        <EmojiEmotionsIcon />,
         <FavoriteIcon />,
         <MedicationIcon />,
         <AppleIcon />,
         <BedIcon />,
-        <ChecklistRtlIcon />,
-        <FitnessCenterIcon />
+        <FitnessCenterIcon />,
     ];
 
-    const item_list = ['Activity', 'Body Measurements', 'Cycle Tracking', 'Heart', 'Medications', 'Nutrition', 'Sleep', 'Symptoms', 'Fitness']
-    const linklist = ['/activity', '/body-measurements', 'cycle-tracking', 'heart', 'medications', 'nutrition', 'sleep', 'symptoms', 'fitness']
+    const item_list = ['Activity', 'Body Measurements', 'Moods', 'Heart', 'Medications', 'Nutrition', 'Sleep', 'Fitness']
+    const linklist = ['/activity', '/body-measurements', 'moods', 'heart', 'medications', 'nutrition', 'sleep', 'fitness']
 
     return (
         <Box sx={{ width: '100%' }}>

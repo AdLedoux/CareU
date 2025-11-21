@@ -2,7 +2,7 @@ import { Card, CardContent, Typography, Grid, TextField, Button, Box } from "@mu
 import { Line } from "react-chartjs-2";
 import { useNavigate } from "react-router-dom";
 
-export default function Cycle() {
+export default function Fitness() {
   const navigate = useNavigate();
 
   const cycleLengths = {
@@ -67,7 +67,7 @@ export default function Cycle() {
         }}
       >
         <Typography variant="h5" gutterBottom sx={{ mb: 0 }}>
-          📅 Cycle Tracking
+          📅 Fitness Tracking
         </Typography>
 
         <Button
@@ -91,7 +91,7 @@ export default function Cycle() {
         <Grid item xs={12} md={6}>
           <Card elevation={3} sx={cardStyle}>
             <CardContent>
-              <Typography sx={headerStyle}>Latest Cycle</Typography>
+              <Typography sx={headerStyle}>Latest Record</Typography>
               <Box sx={contentBoxStyle}>
                 <Typography>Start: Nov 1 2025</Typography>
                 <Typography>Length: 28 days</Typography>
@@ -104,7 +104,7 @@ export default function Cycle() {
         <Grid item xs={12} md={6}>
           <Card elevation={3} sx={cardStyle}>
             <CardContent>
-              <Typography sx={headerStyle}>Add Cycle Info</Typography>
+              <Typography sx={headerStyle}>Add Fitness Info</Typography>
               <Box sx={contentBoxStyle}>
                 <TextField
                   type="date"
@@ -131,7 +131,7 @@ export default function Cycle() {
         <Grid item xs={12} md={6}>
           <Card elevation={3} sx={cardStyle}>
             <CardContent>
-              <Typography sx={headerStyle}>Cycle Length History</Typography>
+              <Typography sx={headerStyle}>Fitness Length History</Typography>
               <Box sx={{ ...contentBoxStyle, width: "100%" }}>
                 <Line data={cycleLengths} />
               </Box>
