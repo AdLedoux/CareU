@@ -3,10 +3,11 @@ import { Line } from "react-chartjs-2";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
+import { useSelector } from "react-redux"; // <-- 引入 useSelector
 
 export default function Body() {
   const navigate = useNavigate();
-  const userId = 8877689391;
+  const userId = useSelector((state) => state.user.user_id); 
 
   const [dailyData, setDailyData] = useState([]);
 
@@ -81,26 +82,27 @@ export default function Body() {
     if (!newWeight) return;
 
     try {
+      const now = new Date();
+      const formattedDate = now.toISOString().slice(0, 19).replace("T", " "); // 格式: YYYY-MM-DD HH:mm:ss
+
       const res = await api.post("/api/weightlog/weight/add/", {
         Id: userId,
-        // use fixed dev date to avoid large span
-        Date: "2016-04-13 00:00:00",
+        Date: formattedDate,
         WeightKg: parseFloat(newWeight),
         WeightPounds: parseFloat(newWeight * 2.20462),
         Fat: newFat ? parseFloat(newFat) : null,
         BMI: newBMI ? parseFloat(newBMI) : null,
       });
 
-      // refresh data from backend (JSON file)
       await fetchDaily();
 
-      // show success snackbar
       setSnackbar({ open: true, message: "Saved weight log successfully.", severity: "success" });
     } catch (err) {
       console.error("Failed to save:", err);
       setSnackbar({ open: true, message: "Failed to save weight log.", severity: "error" });
     }
   }
+
 
   // snackbar state for success/error dialog
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "info" });
@@ -238,13 +240,13 @@ export default function Body() {
         )}
       </Grid>
 
-        <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
-          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
+      <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={handleCloseSnackbar} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
 
-      </div>
+    </div>
   );
 }
 
