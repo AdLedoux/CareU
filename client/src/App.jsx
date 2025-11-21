@@ -9,9 +9,10 @@ import "./chartSetup";
 
 import Activity from "./pages/activity/Activity"
 import Body from "./pages/body/Body"
-import Cycle from "./pages/cycle/Cycle"
+import Fitness from "./pages/fitness/Fitness"
 import Heart from "./pages/heart/Heart"
 import Sleep from "./pages/sleep/Sleep"
+import Mood from "./pages/mood/Mood"
 
 function Logout() {
   localStorage.clear()
@@ -38,9 +39,10 @@ function App() {
         <Route index element={<Home />} />
         <Route path="activity" element={<Activity />} />
         <Route path="body-measurements" element={<Body />} />
-        <Route path="cycle-tracking" element={<Cycle />} />
+        <Route path="fitness" element={<Fitness />} />
         <Route path="heart" element={<Heart />} />
         <Route path="sleep" element={<Sleep />} />
+        <Route path = "moods" element={<Mood />} />
       </Route>
 
       <Route path="/login" element={<Login />} />
