@@ -38,10 +38,7 @@ const Register = () => {
     const handleAgree = async () => {
         setLoading(true);
         try {
-            // 创建 Django 内置 User
             await api.post("/api/user/register/", { username, password });
-
-            // 创建 UserInfo (user_id 不传)
             await api.post("/api/userInfo/profile/", { username, age, gender, height, weight });
 
             navigate("/login");

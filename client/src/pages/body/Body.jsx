@@ -218,7 +218,7 @@ export default function Body() {
       const now = new Date();
       const formattedDate = now.toISOString().slice(0, 19).replace("T", " ");
 
-      const res = await api.post("/api/weightlog/weight/add/", {
+      await api.post("/api/weightlog/weight/add/", {
         Id: userId,
         Date: formattedDate,
         WeightKg: parseFloat(newWeight),
