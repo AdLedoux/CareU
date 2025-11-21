@@ -341,7 +341,7 @@ export default function Body() {
         {intradayChart && (
           <Grid item xs={12}>
             <Card elevation={3} sx={{ ...cardStyle, height: 500 }}>
-              <Typography sx={headerStyle}>Daily status</Typography>
+              <Typography sx={headerStyle}>Hourly Status</Typography>
               <Box sx={{ flexGrow: 1 }}>
                 <Line data={intradayChart} options={chartOptions} />
               </Box>
