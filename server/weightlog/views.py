@@ -1,141 +1,125 @@
-# Create your views here.
-import os
-import json
+"""
+WeightLog views: switch from JSON-file-backed dev endpoints to DB-backed endpoints.
+
+Endpoints now expect a `user_id` (UUID) path parameter for list/daily views.
+Create endpoint accepts a payload with `Id` (user_id) or can be called with a body containing the user's UUID.
+
+Behavior:
+- GET /weight/<uuid:user_id>/       -> returns all WeightLog objects for that user (serialized)
+- GET /weight/<uuid:user_id>/daily/ -> returns one entry per day (last recorded of that day)
+- POST /weight/add/                 -> creates a WeightLog record in DB for the provided `Id` (user_id) and returns the created record
+
+"""
+
 from datetime import datetime
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
-from django.db import IntegrityError
+
+from django.shortcuts import get_object_or_404
 
 from .models import WeightLog
 from .serializers import WeightLogSerializer
+from userInfo.models import UserInfo
 
-def load_weight_json():
-    json_path = os.path.join(os.path.dirname(__file__), "weightLogInfo.cleaned.json")
-
-    if not os.path.exists(json_path):
-        return None
-
-    with open(json_path, "r", encoding="utf-8") as f:
-        return json.load(f)
 
 class WeightLogListById(APIView):
-    def get(self, request, id):
-        data = load_weight_json()
-        if data is None:
-            return Response({"detail": "JSON file not found."}, status=500)
+    permission_classes = [AllowAny]
 
-        records = [r for r in data if r.get("Id") == id]
+    def get(self, request, user_id):
+        # user_id is a UUID (path converter)
+        qs = WeightLog.objects.filter(user__user_id=user_id).order_by("Date")
+        data = WeightLogSerializer(qs, many=True).data
+        return Response(data, status=200)
 
-        def parse_date(date_str):
-            for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d"):
-                try:
-                    return datetime.strptime(date_str, fmt)
-                except:
-                    continue
-            return None
-
-        # 排序
-        records.sort(key=lambda r: parse_date(r["Date"]) or datetime.min)
-
-        return Response(records, status=200)
 
 class DailyWeightByIdView(APIView):
-    def get(self, request, id):
-        data = load_weight_json()
-        if data is None:
-            return Response({"detail": "JSON file not found."}, status=500)
+    permission_classes = [AllowAny]
 
-        records = [r for r in data if r.get("Id") == id]
+    def get(self, request, user_id):
+        qs = WeightLog.objects.filter(user__user_id=user_id).order_by("Date")
 
-        def parse_date(date_str):
-            for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d"):
-                try:
-                    return datetime.strptime(date_str, fmt)
-                except:
-                    continue
-            return None
-
-        records.sort(key=lambda r: parse_date(r["Date"]) or datetime.min)
-
-        result = [
-            {
-                "date": parse_date(r["Date"]).strftime("%Y-%m-%d")
-                if parse_date(r["Date"])
-                else r["Date"],
-                "WeightKg": r.get("WeightKg"),
-                "WeightPounds": r.get("WeightPounds"),
-                "Fat": r.get("Fat"),
-                "BMI": r.get("BMI"),
+        # Build a dict keyed by date -> keep last entry of the day
+        daily = {}
+        for rec in qs:
+            day = rec.Date.date().isoformat()
+            # overwrite so the last record for the day remains
+            daily[day] = {
+                "date": day,
+                "WeightKg": rec.WeightKg,
+                "WeightPounds": rec.WeightPounds,
+                "Fat": rec.Fat,
+                "BMI": rec.BMI,
             }
-            for r in records
-        ]
 
-        return Response(result, status=200)
+        # Return as sorted list by date
+        items = [daily[d] for d in sorted(daily.keys())]
+        return Response(items, status=200)
+
+
 class WeightLogCreateView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
-        serializer = WeightLogSerializer(data=request.data)
+        # Expect the payload to include user id in `Id` (UUID) or `user_id`.
+        user_id = request.data.get("Id") or request.data.get("user_id")
+        if not user_id:
+            return Response({"detail": "Missing user Id."}, status=status.HTTP_400_BAD_REQUEST)
 
-        if serializer.is_valid():
-            db_saved = True
-            record = None
-            try:
-                record = serializer.save()
-            except IntegrityError:
-                db_saved = False
-            try:
-                json_path = os.path.join(os.path.dirname(__file__), "weightLogInfo.cleaned.json")
-                obj = {
-                    "Id": int(request.data.get("Id")) if request.data.get("Id") is not None else None,
-                    "Date": None,
-                    "WeightKg": float(request.data.get("WeightKg")) if request.data.get("WeightKg") is not None else None,
-                    "WeightPounds": float(request.data.get("WeightPounds")) if request.data.get("WeightPounds") is not None else None,
-                    "Fat": (float(request.data.get("Fat")) if request.data.get("Fat") not in (None, "") else None),
-                    "BMI": (float(request.data.get("BMI")) if request.data.get("BMI") not in (None, "") else None),
-                }
-                date_str = request.data.get("Date")
-                if date_str:
-                    try:
-                        ds = date_str.replace("Z", "")
-                        dt = datetime.fromisoformat(ds)
-                        obj["Date"] = dt.strftime("%Y-%m-%d %H:%M:%S")
-                    except Exception:
-                        try:
-                            dt = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
-                            obj["Date"] = dt.strftime("%Y-%m-%d %H:%M:%S")
-                        except Exception:
-                            obj["Date"] = date_str
+        # Find UserInfo by user_id
+        try:
+            user = UserInfo.objects.get(user_id=user_id)
+        except UserInfo.DoesNotExist:
+            return Response({"detail": "User not found."}, status=status.HTTP_400_BAD_REQUEST)
 
-                if os.path.exists(json_path):
-                    with open(json_path, "r", encoding="utf-8") as f:
-                        data = json.load(f)
-                else:
-                    data = []
-                data.append(obj)
-                with open(json_path, "w", encoding="utf-8") as f:
-                    json.dump(data, f, ensure_ascii=False, indent=2)
-                json_ok = True
+        # Parse fields
+        date_str = request.data.get("Date")
+        dt = None
+        if date_str:
+            try:
+                # expect 'YYYY-MM-DD HH:MM:SS'
+                dt = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")
             except Exception:
-                json_ok = False
+                try:
+                    dt = datetime.fromisoformat(date_str.replace("Z", ""))
+                except Exception:
+                    dt = None
 
-            if db_saved and record is not None:
-                resp = WeightLogSerializer(record).data
-                resp.update({"db_saved": True})
-            else:
-                resp = {
-                    "Id": int(request.data.get("Id")) if request.data.get("Id") is not None else None,
-                    "Date": request.data.get("Date"),
-                    "WeightKg": float(request.data.get("WeightKg")) if request.data.get("WeightKg") is not None else None,
-                    "WeightPounds": float(request.data.get("WeightPounds")) if request.data.get("WeightPounds") is not None else None,
-                    "Fat": (float(request.data.get("Fat")) if request.data.get("Fat") not in (None, "") else None),
-                    "BMI": (float(request.data.get("BMI")) if request.data.get("BMI") not in (None, "") else None),
-                    "db_saved": False,
-                }
+        try:
+            weight = float(request.data.get("WeightKg")) if request.data.get("WeightKg") is not None else None
+        except Exception:
+            weight = None
+        try:
+            pounds = float(request.data.get("WeightPounds")) if request.data.get("WeightPounds") is not None else None
+        except Exception:
+            pounds = None
+        try:
+            fat = float(request.data.get("Fat")) if request.data.get("Fat") not in (None, "") else None
+        except Exception:
+            fat = None
+        try:
+            bmi = float(request.data.get("BMI")) if request.data.get("BMI") not in (None, "") else None
+        except Exception:
+            bmi = None
 
-            resp["json_appended"] = json_ok
+        if dt is None:
+            return Response({"detail": "Invalid or missing Date format."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Create DB record
+        try:
+            rec = WeightLog.objects.create(
+                user=user,
+                Date=dt,
+                WeightKg=weight,
+                WeightPounds=pounds,
+                Fat=fat,
+                BMI=bmi,
+            )
+            resp = WeightLogSerializer(rec).data
+            resp.update({"db_saved": True})
             return Response(resp, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"detail": f"Failed to create record: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
