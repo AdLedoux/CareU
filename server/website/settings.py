@@ -65,7 +65,6 @@ INSTALLED_APPS = [
     "userInfo",
     "fitnessRecord",
     "heartRate",
-    "sleepRecord",
     "activity",
     "weightlog",
     "mood",
