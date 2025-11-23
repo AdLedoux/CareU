@@ -53,7 +53,6 @@ const moodSlice = createSlice({
       })
       .addCase(createMood.fulfilled, (state, action) => {
         state.createStatus = "succeeded";
-        // prepend new record so UI shows latest first
         state.items = [action.payload, ...state.items];
       })
       .addCase(createMood.rejected, (state, action) => {

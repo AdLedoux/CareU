@@ -65,7 +65,6 @@ const slice = createSlice({
       })
       .addCase(createRecord.fulfilled, (state, action) => {
         state.createStatus = "succeeded";
-        // if API returns created record, optionally push to list
         if (action.payload) state.list = [action.payload, ...state.list];
       })
       .addCase(createRecord.rejected, (state, action) => {
