@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     "activity",
     "weightlog",
     "mood",
+    "ai_agent",
 ]
 
 MIDDLEWARE = [
