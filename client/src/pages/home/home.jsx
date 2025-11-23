@@ -32,6 +32,16 @@ const Home = () => {
 
     const item_list = ['Activity', 'Body Measurements', 'Moods', 'Heart', 'Medications', 'Nutrition', 'Sleep', 'Fitness']
     const linklist = ['/activity', '/body-measurements', 'moods', 'heart', 'medications', 'nutrition', 'sleep', 'fitness']
+    const item_summaries = [
+        'Track your daily physical activities, steps, and movement patterns to maintain an active lifestyle.',
+        'Record key body metrics like weight, height, BMI, and body fat percentage to monitor health progress.',
+        'Log your emotional states and mood changes to better understand your mental wellbeing over time.',
+        'Keep track of heart-related data such as heart rate and blood pressure to monitor cardiovascular health.',
+        'Manage your medications schedule, dosage, and reminders to ensure proper adherence.',
+        'Track your meals, calories, and nutrient intake to support a balanced and healthy diet.',
+        'Record sleep duration and quality to improve rest and overall wellness.',
+        'Log workouts, exercise routines, and fitness goals to stay motivated and track performance improvements.'
+    ];
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -58,7 +68,7 @@ const Home = () => {
                                 </Box>
                                 <CardContent>
                                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                        Health activity summary
+                                        {item_summaries[index]}
                                     </Typography>
                                 </CardContent>
                             </CardActionArea>
