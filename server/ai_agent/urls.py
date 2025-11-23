@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import AITest
+from .views import AIChat, AIWeight, AIMood
 
 urlpatterns = [
-    path("test/", AITest.as_view()),
+    path("chat/", AIChat.as_view()),
+    path("weight/", AIWeight.as_view()),
+    path("mood/", AIMood.as_view()),
 ]

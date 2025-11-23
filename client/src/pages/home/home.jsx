@@ -66,7 +66,9 @@ const Home = () => {
                     </Grid>
                 ))}
             </Grid>
-            < Ai />
+            <Box sx={{ position: 'fixed', right: 16, bottom: 16, zIndex: 1300 }}>
+                <Ai />
+            </Box>
         </Box>
     );
 }

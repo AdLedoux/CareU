@@ -1,15 +1,18 @@
 from google import genai
-import os
+from django.conf import settings
 
-def simple_test():
+def ai_service(prompt):
     try:
-        client = genai.Client()
+        client = genai.Client(api_key=settings.GEMINI_API_KEY)
+
         res = client.models.generate_content(
             model="gemini-2.5-flash",
-            contents="Hello from Django!"
+            contents=[prompt]
         )
+
         print("Gemini response:", res.text)
         return res.text
+
     except Exception as e:
         print("Gemini Error:", e)
         return f"Error: {e}"
