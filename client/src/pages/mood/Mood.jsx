@@ -68,7 +68,6 @@ export default function Mood() {
         mood_cause: moodCause,
       };
       const result = await dispatch(createMood(payload)).unwrap();
-      // createMood thunk already pushes the created item into the slice's items
       setSnack({ open: true, message: "Mood saved", severity: "success" });
       setOpen(false);
     } catch (err) {

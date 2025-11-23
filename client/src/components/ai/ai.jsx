@@ -30,7 +30,7 @@ export default function Ai() {
   const userId = useSelector((state) => state.user?.user_id || '');
 
   const [open, setOpen] = useState(false);
-  const [tab, setTab] = useState(0); // 0 chat,1 weight,2 mood
+  const [tab, setTab] = useState(0);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [chatResult, setChatResult] = useState('');
@@ -47,7 +47,6 @@ export default function Ai() {
     setLoading(true);
     try {
       if (tab === 0) {
-        // Chat
         const res = await api.post('/api/ai/chat/', { message: input });
         setChatResult(res.data.result || 'No response');
       } else if (tab === 1) {
