@@ -15,7 +15,7 @@ class AIChat(APIView):
         result = ai_service(f"User said: {user_input}")
         return Response({"result": result})
 
-# Weight Advice
+# Weight
 class AIWeight(APIView):
     def post(self, request):
         user_id = request.data.get('user_id') or request.query_params.get('user_id')
@@ -30,12 +30,12 @@ class AIWeight(APIView):
             fat = getattr(w, 'Fat', None)
             fat_str = f" Fat {fat}" if fat is not None else ""
             weight_text_lines.append(f"{w.Date.strftime('%Y-%m-%d')}: {w.WeightKg} kg{fat_str}")
-        weight_text = "\n".join(reversed(weight_text_lines))  # oldest -> newest
+        weight_text = "\n".join(reversed(weight_text_lines))
         prompt = f"User's last {len(logs)} weight logs:\n{weight_text}\nPlease provide a short, friendly analysis in English, and 2 actionable suggestions." 
         result = ai_service(prompt)
         return Response({"result": result})
 
-# Mood Summary
+# Mood
 class AIMood(APIView):
     def post(self, request):
         user_id = request.data.get('user_id') or request.query_params.get('user_id')
