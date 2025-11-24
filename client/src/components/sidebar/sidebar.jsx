@@ -9,7 +9,6 @@ import List from '@mui/material/List';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import AccessibilityIcon from '@mui/icons-material/Accessibility';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import MedicationIcon from '@mui/icons-material/Medication';
 import AppleIcon from '@mui/icons-material/Apple';
 import HomeIcon from '@mui/icons-material/Home';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
@@ -25,17 +24,14 @@ const Sidebar = (props) => {
         <AccessibilityIcon />,
         <EmojiEmotionsIcon />,
         <FavoriteIcon />,
-        // <MedicationIcon />,
-        // <AppleIcon />,
+        <AppleIcon />,
         <BedIcon />,
         <FitnessCenterIcon />,
 
     ];
 
-    // const item_list = ['Home', 'Activity', 'Body Measurements', 'Moods', 'Heart', 'Medications', 'Nutrition', 'Sleep', 'Fitness']
-    // const linklist = ['/', '/activity', '/body-measurements', '/moods', '/heart', '/medications', '/nutrition', '/sleep', '/fitness']
-    const item_list = ['Home', 'Activity', 'Body Measurements', 'Moods', 'Heart', 'Sleep', 'Fitness']
-    const linklist = ['/', '/activity', '/body-measurements', '/moods', '/heart', '/sleep', '/fitness']
+    const item_list = ['Home', 'Activity', 'Body Measurements', 'Moods', 'Heart', 'Nutrition', 'Sleep', 'Fitness'];
+    const linklist = ['/', '/activity', '/body-measurements', '/moods', '/heart', '/nutrition', '/sleep', '/fitness'];
 
     return (
         <>
