@@ -5,4 +5,5 @@ urlpatterns = [
     path("chat/", AIChat.as_view()),
     path("weight/", AIWeight.as_view()),
     path("mood/", AIMood.as_view()),
+    path("fitness/", AIMood.as_view())
 ]
