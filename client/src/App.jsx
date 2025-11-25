@@ -7,11 +7,10 @@ import NotFound from "./pages/notFound/NotFound"
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute"
 import "./chartSetup";
 
-import Activity from "./pages/activity/activity"
+import Activity from "./pages/activity/Activity"
 import Body from "./pages/body/body"
 import Fitness from "./pages/fitness/Fitness"
-import Heart from "./pages/heart/Heart"
-import Sleep from "./pages/sleep/Sleep"
+import Heart from "./pages/heart/heart"
 import Mood from "./pages/mood/Mood"
 import Nutrition from "./pages/nutrition/nutrition"
 import Sleep from "./pages/sleep/Sleep"
@@ -51,31 +50,6 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="/register" element={<RegisterAndLogout />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-    <Routes>
-      {/* Protected routes — everything inside Layout */}
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <Layout />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<Home />} />
-        <Route path="activity" element={<Activity />} />
-        <Route path="body-measurements" element={<Body />} />
-        <Route path="fitness" element={<Fitness />} />
-        <Route path="heart" element={<Heart />} />
-        <Route path="sleep" element={<Sleep />} />
-        <Route path = "moods" element={<Mood />} />
-      </Route>
-
-      <Route path="/login" element={<Login />} />
-      <Route path="/logout" element={<Logout />} />
-      <Route path="/register" element={<RegisterAndLogout />} />
-
       <Route path="*" element={<NotFound />} />
     </Routes>
   )
