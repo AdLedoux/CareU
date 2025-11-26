@@ -7,7 +7,7 @@ import NotFound from "./pages/notFound/NotFound"
 import ProtectedRoute from "./components/protectedRoute/ProtectedRoute"
 import "./chartSetup";
 
-import Activity from "./pages/activity/Activity"
+import Activity from "./pages/activity/activity"
 import Body from "./pages/body/body"
 import Fitness from "./pages/fitness/Fitness"
 import Heart from "./pages/heart/heart"
