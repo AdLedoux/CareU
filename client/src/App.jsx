@@ -12,7 +12,7 @@ import Body from "./pages/body/Body"
 import Fitness from "./pages/fitness/Fitness"
 import Heart from "./pages/heart/Heart"
 import Sleep from "./pages/sleep/Sleep"
-import Nutrition from "./pages/nutrition/Nutrition"
+import Nutrition from "./pages/nutrition/nutrition"
 import Mood from "./pages/mood/Mood"
 
 function Logout() {
