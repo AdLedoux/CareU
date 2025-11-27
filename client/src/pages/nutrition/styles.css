@@ -1,0 +1,11 @@
+﻿/* Keep styling consistent with Home page card layout */
+.nutrition-card {
+  border-radius: 14px;
+}
+
+.nutrition-accent {
+  background: #ffd6e8;
+  height: 4px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}

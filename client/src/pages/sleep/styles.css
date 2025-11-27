@@ -1,0 +1,13 @@
+.sleep-card {
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+}
+
+.sleep-chart {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.sleep-chart svg {
+  min-width: 100%;
+}
