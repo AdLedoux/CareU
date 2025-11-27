@@ -50,32 +50,24 @@ export default function Ai() {
 
   const handleTabChange = (e, v) => setTab(v);
 
-  // ─────────────────────────────
-  // Run AI for different tabs
-  // ─────────────────────────────
   const runAI = async () => {
     setLoading(true);
     try {
       if (tab === 0) {
-        // Chat
         const res = await api.post('/api/ai/chat/', { message: input });
         setChatResult(res.data.result || 'No response');
 
-        // 清空输入框！！
         setInput('');
       } 
       else if (tab === 1) {
-        // Weight
         const res = await api.post('/api/ai/weight/', userId ? { user_id: userId } : {});
         setWeightResult(res.data.result || 'No response');
       } 
       else if (tab === 2) {
-        // Mood
         const res = await api.post('/api/ai/mood/', userId ? { user_id: userId } : {});
         setMoodResult(res.data.result || 'No response');
       }
       else if (tab === 3) {
-        // Fitness
         const res = await api.post('/api/ai/fitness/', userId ? { user_id: userId } : {});
         setFitnessResult(res.data.result || 'No response');
       }
