@@ -18,7 +18,7 @@ export default function Body() {
   const [weightChart, setWeightChart] = useState(null);
   const [fatChart, setFatChart] = useState(null);
   const [bmiChart, setBMIChart] = useState(null);
-  const [intradayChart, setIntradayChart] = useState(null);
+  
 
   const chartOptions = {
     maintainAspectRatio: false,
@@ -112,7 +112,6 @@ export default function Body() {
       const res = await api.get(`/api/weightlog/weight/${userId}/`);
       const list = Array.isArray(res.data) ? res.data : [];
       if (!list.length) {
-        setIntradayChart(null);
         return;
       }
 
@@ -133,7 +132,6 @@ export default function Body() {
         if (maxDt) targetDay = maxDt.toISOString().slice(0, 10);
       }
       if (!targetDay) {
-        setIntradayChart(null);
         return;
       }
 
@@ -172,7 +170,8 @@ export default function Body() {
         if (filledB[i] == null && i > 0) filledB[i] = filledB[i - 1];
       }
 
-      setIntradayChart({
+      // Reflect intraday data in the three separate charts (weight, fat, BMI)
+      setWeightChart({
         labels,
         datasets: [
           {
@@ -182,8 +181,13 @@ export default function Body() {
             backgroundColor: "rgba(25,118,210,0.25)",
             fill: true,
             tension: 0.3,
-            yAxisID: "y",
           },
+        ],
+      });
+
+      setFatChart({
+        labels,
+        datasets: [
           {
             label: `Body Fat (%) — ${targetDay}`,
             data: filledF,
@@ -191,8 +195,13 @@ export default function Body() {
             backgroundColor: "rgba(76,175,80,0.15)",
             fill: false,
             tension: 0.3,
-            yAxisID: "y1",
           },
+        ],
+      });
+
+      setBMIChart({
+        labels,
+        datasets: [
           {
             label: `BMI — ${targetDay}`,
             data: filledB,
@@ -200,14 +209,12 @@ export default function Body() {
             backgroundColor: "rgba(255,152,0,0.15)",
             fill: false,
             tension: 0.3,
-            yAxisID: "y1",
           },
         ],
       });
 
     } catch (err) {
       console.error('Failed to fetch full list for intraday chart:', err);
-      setIntradayChart(null);
     }
   }
 
@@ -338,16 +345,7 @@ export default function Body() {
           </Card>
         </Grid>
 
-        {intradayChart && (
-          <Grid item xs={12}>
-            <Card elevation={3} sx={{ ...cardStyle, height: 500 }}>
-              <Typography sx={headerStyle}>Hourly Status</Typography>
-              <Box sx={{ flexGrow: 1 }}>
-                <Line data={intradayChart} options={chartOptions} />
-              </Box>
-            </Card>
-          </Grid>
-        )}
+        {/* Intraday combined chart removed — intraday data now reflected in the three separate charts above */}
 
         {weightChart && (
           <Grid item xs={12}>
