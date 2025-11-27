@@ -26,7 +26,7 @@ const Sidebar = (props) => {
         <EmojiEmotionsIcon />,
         <FavoriteIcon />,
         // <MedicationIcon />,
-        // <AppleIcon />,
+        <AppleIcon />,
         <BedIcon />,
         <FitnessCenterIcon />,
 
@@ -34,8 +34,8 @@ const Sidebar = (props) => {
 
     // const item_list = ['Home', 'Activity', 'Body Measurements', 'Moods', 'Heart', 'Medications', 'Nutrition', 'Sleep', 'Fitness']
     // const linklist = ['/', '/activity', '/body-measurements', '/moods', '/heart', '/medications', '/nutrition', '/sleep', '/fitness']
-    const item_list = ['Home', 'Activity', 'Body Measurements', 'Moods', 'Heart', 'Sleep', 'Fitness']
-    const linklist = ['/', '/activity', '/body-measurements', '/moods', '/heart', '/sleep', '/fitness']
+    const item_list = ['Home', 'Activity', 'Body Measurements', 'Moods', 'Heart', 'Nutrition', 'Sleep', 'Fitness']
+    const linklist = ['/', '/activity', '/body-measurements', '/moods', '/heart', '/nutrition', '/sleep', '/fitness']
 
     return (
         <>

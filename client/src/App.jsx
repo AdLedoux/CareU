@@ -12,6 +12,7 @@ import Body from "./pages/body/Body"
 import Fitness from "./pages/fitness/Fitness"
 import Heart from "./pages/heart/Heart"
 import Sleep from "./pages/sleep/Sleep"
+import Nutrition from "./pages/nutrition/Nutrition"
 import Mood from "./pages/mood/Mood"
 
 function Logout() {
@@ -42,6 +43,7 @@ function App() {
         <Route path="fitness" element={<Fitness />} />
         <Route path="heart" element={<Heart />} />
         <Route path="sleep" element={<Sleep />} />
+        <Route path="nutrition" element={<Nutrition />} />
         <Route path = "moods" element={<Mood />} />
       </Route>
 

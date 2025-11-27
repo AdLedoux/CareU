@@ -10,6 +10,8 @@ export const ROUTES = {
   BODY: "/body",
   CYCLE: "/cycle",
   HEART: "/heart",
+  NUTRITION: "/nutrition",
+  SLEEP: "/sleep",
   LOGIN: "/login",
   REGISTER: "/register",
   NOT_FOUND: "*",
